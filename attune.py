@@ -14,13 +14,6 @@ import geopandas as gpd
 from shapely.geometry import Point
 from datetime import datetime, timedelta, timezone
 
-#===================================
-# Header
-#====================================
-
-headers = {"User-Agent": "EyeForNature/1.0"}
-response = requests.get(url, params=params, headers=headers, timeout=60)
-
 # ============================================================
 # INPUT FILES
 # ============================================================
@@ -91,10 +84,18 @@ print(f"Since   : {created_after}")
 
 
 # ============================================================
-# API SETUP
+# API Configuration
 # ============================================================
 
 url = "https://api.inaturalist.org/v1/observations"
+
+headers = {
+    "User-Agent": "Attune2Nature/1.0"
+}
+
+# ============================================================
+# Tracking Variables
+# ============================================================
 
 grand_total = 0
 species_counts = {}
