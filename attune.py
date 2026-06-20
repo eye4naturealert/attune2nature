@@ -10,6 +10,7 @@
 
 import requests
 import geopandas as gpd
+import pandas as pd
 
 from shapely.geometry import Point
 from datetime import datetime, timedelta, timezone
@@ -100,6 +101,7 @@ headers = {
 grand_total = 0
 species_counts = {}
 
+all_matches = []
 
 # ============================================================
 # MAIN LOOP
@@ -193,15 +195,16 @@ for species_name, taxon_id in SPECIES.items():
 
         if point.within(polygon):
 
-            matches.append({
-                "id": obs["id"],
-                "date": obs.get("observed_on", "Unknown"),
-                "observer": obs.get("user", {}).get("login", "Unknown"),
-                "quality_grade": obs.get("quality_grade", "unknown"),
-                "lat": lat,
-                "lon": lon,
-                "url": f"https://www.inaturalist.org/observations/{obs['id']}"
-            })
+        matches.append({
+            "species": species_name,
+            "id": obs["id"],
+            "date": obs.get("observed_on", "Unknown"),
+            "observer": obs.get("user", {}).get("login", "Unknown"),
+            "quality_grade": obs.get("quality_grade", "unknown"),
+            "lat": lat,
+            "lon": lon,
+            "url": f"https://www.inaturalist.org/observations/{obs['id']}"
+        })
 
 
     # ========================================================
@@ -211,6 +214,8 @@ for species_name, taxon_id in SPECIES.items():
     count = len(matches)
     species_counts[species_name] = count
     grand_total += count
+
+    all_matches.extend(matches)
 
     print(f"\nMATCHES IN AOI: {count}")
 
@@ -238,4 +243,61 @@ for species, count in species_counts.items():
 
 print("\n" + "-" * 70)
 print(f"TOTAL OBSERVATIONS: {grand_total}")
+
+# ============================================================
+# EXPORT CSV
+# ============================================================
+
+from datetime import datetime
+
+if all_matches:
+
+    df = pd.DataFrame(all_matches)
+
+    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+
+    filename = f"observations_{timestamp}.csv"
+
+    df.to_csv(
+        filename,
+        index=False
+    )
+
+    print("\nCSV exported:")
+    print(filename)
+
+else:
+
+    print("\nNo observations to export.")
+
+# always runs
+print("\nFinished.")
+
+# ============================================================
+# EXPORT CSV
+# ============================================================
+
+from datetime import datetime
+
+if all_matches:
+
+    df = pd.DataFrame(all_matches)
+
+    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+
+    filename = f"observations_{timestamp}.csv"
+
+    df.to_csv(
+        filename,
+        index=False
+    )
+
+    print("\nCSV exported:")
+    print(filename)
+
+else:
+
+    print("\nNo observations to export.")
+
+# always runs
 print("\nFinished.")
