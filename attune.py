@@ -18,8 +18,8 @@ from datetime import datetime, timedelta, timezone
 # INPUT FILES
 # ============================================================
 
-SEARCH_AREA_GEOJSON = r"C:\Users\curra\OneDrive\Documents\Projects\Eye4Nature\Data/LoudonCounty.geojson"
-AOI_GEOJSON = r"C:\Users\curra\OneDrive\Documents\Projects\Eye4Nature\Data/LoudonCounty.geojson"
+SEARCH_AREA_GEOJSON = "data/LoudonCounty.geojson"
+AOI_GEOJSON = "data/LoudonCounty.geojson"
 
 
 # ============================================================
