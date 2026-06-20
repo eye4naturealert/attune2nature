@@ -195,16 +195,16 @@ for species_name, taxon_id in SPECIES.items():
 
         if point.within(polygon):
 
-        matches.append({
-            "species": species_name,
-            "id": obs["id"],
-            "date": obs.get("observed_on", "Unknown"),
-            "observer": obs.get("user", {}).get("login", "Unknown"),
-            "quality_grade": obs.get("quality_grade", "unknown"),
-            "lat": lat,
-            "lon": lon,
-            "url": f"https://www.inaturalist.org/observations/{obs['id']}"
-        })
+            matches.append({
+                "species": species_name,
+                "id": obs["id"],
+                "date": obs.get("observed_on", "Unknown"),
+                "observer": obs.get("user", {}).get("login", "Unknown"),
+                "quality_grade": obs.get("quality_grade", "unknown"),
+                "lat": lat,
+                "lon": lon,
+                "url": f"https://www.inaturalist.org/observations/{obs['id']}"
+            })
 
 
     # ========================================================
