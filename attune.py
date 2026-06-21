@@ -166,44 +166,45 @@ for species_name, taxon_id in SPECIES.items():
     # AOI FILTERING (FIXED SCOPE)
     # ========================================================
 
-    matches = []
+matches = []
 
-    for obs in all_observations:
+for obs in all_observations:
 
-        geojson = obs.get("geojson")
-        if not geojson or "coordinates" not in geojson:
-            continue
+    geojson = obs.get("geojson")
+    if not geojson or "coordinates" not in geojson:
+        continue
 
-        coords = geojson["coordinates"]
-        if not coords or len(coords) != 2:
-            continue
+    coords = geojson["coordinates"]
+    if not coords or len(coords) != 2:
+        continue
 
-        lon, lat = coords
-        point = Point(lon, lat)
+    lon, lat = coords
+    point = Point(lon, lat)
 
-        if point.within(polygon):
+    if point.within(polygon):
 
-            quality = obs.get("quality_grade", "unknown")
+        quality = obs.get("quality_grade", "unknown")
 
-            if quality == "needs_id":
-                priority = 1
-            elif quality == "research":
-                priority = 2
-            else:
-                priority = 3
+        if quality == "needs_id":
+            priority = 1
+        elif quality == "research":
+            priority = 2
+        else:
+            priority = 3
 
-            matches.append({
-                "species": species_name,
-                "id": obs["id"],
-                "date": obs.get("observed_on", "Unknown"),
-                "observer": obs.get("user", {}).get("login", "Unknown"),
-                "quality_grade": quality,
-                "priority": priority,
-                "lat": lat,
-                "lon": lon,
-                "url": f"https://www.inaturalist.org/observations/{obs['id']}"
-            })
-
+        # 🔥 MUST BE INSIDE IF BLOCK
+        matches.append({
+            "species": species_name,
+            "id": obs["id"],
+            "observed_on": obs.get("observed_on", "Unknown"),
+            "created_at": obs.get("created_at", "Unknown"),
+            "observer": obs.get("user", {}).get("login", "Unknown"),
+            "quality_grade": quality,
+            "priority": priority,
+            "lat": lat,
+            "lon": lon,
+            "url": f"https://www.inaturalist.org/observations/{obs['id']}"
+        })
     # ========================================================
     # OUTPUT (FIXED SCOPE)
     # ========================================================
@@ -222,10 +223,12 @@ for species_name, taxon_id in SPECIES.items():
         print("\n" + "-" * 60)
         print(f"Observation #{i}")
         print(f"Observer: {obs['observer']}")
-        print(f"Date: {obs['date']}")
+        print(f"Observed: {obs.get('observed_on')}")
+        print(f"Uploaded: {obs.get('created_at')}")
         print(f"Quality: {obs['quality_grade']}")
         print(f"Coords: {obs['lat']:.5f}, {obs['lon']:.5f}")
         print(f"URL: {obs['url']}")
+        
 
 # ============================================================
 # FINAL SUMMARY
