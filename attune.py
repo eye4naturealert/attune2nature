@@ -33,6 +33,12 @@ SPECIES = {
     "American Black Bear": 41638
 }
 
+# ============================================================
+# TIME WINDOW SETTING
+# ============================================================
+
+LOOKBACK_HOURS = 72
+
 
 # ============================================================
 # LOAD SEARCH AREA (BOUNDING BOX)
@@ -69,16 +75,17 @@ print("AOI Loaded")
 
 
 # ============================================================
-# TIME WINDOW (LAST 24 HOURS, UTC)
+# TIME WINDOW
 # ============================================================
 
 utc_now = datetime.now(timezone.utc)
-utc_24hrs_ago = utc_now - timedelta(hours=24)
 
-created_after = utc_24hrs_ago.replace(microsecond=0).isoformat()
+utc_start = utc_now - timedelta(hours=LOOKBACK_HOURS)
+
+created_after = utc_start.replace(microsecond=0).isoformat()
 
 print("\n" + "=" * 70)
-print("TIME WINDOW (24 HOURS)")
+print(f"TIME WINDOW ({LOOKBACK_HOURS} HOURS)")
 print("=" * 70)
 print(f"Now (UTC): {utc_now}")
 print(f"Since   : {created_after}")
