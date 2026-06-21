@@ -30,7 +30,7 @@ AOI_GEOJSON = "data/LoudonCounty.geojson"
 SPECIES = {
     "Eastern Box Turtle": 39814,
     "Common Snapping Turtle": 39672,
-    "American Black Bear": 41639
+    "American Black Bear": 41638
 }
 
 
