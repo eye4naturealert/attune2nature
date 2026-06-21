@@ -180,44 +180,60 @@ for species_name, taxon_id in SPECIES.items():
     print(f"Total downloaded: {len(all_observations)}")
 
 
-    # ========================================================
-    # AOI FILTERING
-    # ========================================================
+# ========================================================
+# AOI FILTERING
+# ========================================================
 
-    matches = []
+matches = []
 
-    for obs in all_observations:
+for obs in all_observations:
 
-        geojson = obs.get("geojson")
-        if not geojson or "coordinates" not in geojson:
-            continue
+    geojson = obs.get("geojson")
+    if not geojson or "coordinates" not in geojson:
+        continue
 
-        coords = geojson["coordinates"]
-        if not coords or len(coords) != 2:
-            continue
+    coords = geojson["coordinates"]
+    if not coords or len(coords) != 2:
+        continue
 
-        lon, lat = coords
+    lon, lat = coords
 
-        point = Point(lon, lat)
+    point = Point(lon, lat)
 
-        if point.within(polygon):
+    if point.within(polygon):
 
-            matches.append({
-                "species": species_name,
-                "id": obs["id"],
-                "date": obs.get("observed_on", "Unknown"),
-                "observer": obs.get("user", {}).get("login", "Unknown"),
-                "quality_grade": obs.get("quality_grade", "unknown"),
-                "lat": lat,
-                "lon": lon,
-                "url": f"https://www.inaturalist.org/observations/{obs['id']}"
-            })
+        # ----------------------------------------------------
+        # PRIORITY LOGIC (for sorting later)
+        # ----------------------------------------------------
+        quality = obs.get("quality_grade", "unknown")
+
+        if quality == "needs_id":
+            priority = 1
+        elif quality == "research":
+            priority = 2
+        else:
+            priority = 3
+
+        # ----------------------------------------------------
+        # STORE MATCH
+        # ----------------------------------------------------
+        matches.append({
+            "species": species_name,
+            "id": obs["id"],
+            "date": obs.get("observed_on", "Unknown"),
+            "observer": obs.get("user", {}).get("login", "Unknown"),
+            "quality_grade": quality,
+            "priority": priority,
+            "lat": lat,
+            "lon": lon,
+            "url": f"https://www.inaturalist.org/observations/{obs['id']}"
+        })
 
 
     # ========================================================
     # OUTPUT
     # ========================================================
-
+    matches.sort(key=lambda x: x["priority"])
     count = len(matches)
     species_counts[species_name] = count
     grand_total += count
