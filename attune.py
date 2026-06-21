@@ -7,7 +7,6 @@
 #   Filter by AOI
 # ============================================================
 
-
 import requests
 import geopandas as gpd
 import pandas as pd
@@ -21,7 +20,6 @@ from datetime import datetime, timedelta, timezone
 
 SEARCH_AREA_GEOJSON = "data/LoudonCounty.geojson"
 AOI_GEOJSON = "data/LoudonCounty.geojson"
-
 
 # ============================================================
 # SPECIES MONITOR LIST
@@ -39,7 +37,6 @@ SPECIES = {
 
 LOOKBACK_HOURS = 72
 
-
 # ============================================================
 # LOAD SEARCH AREA (BOUNDING BOX)
 # ============================================================
@@ -49,13 +46,10 @@ print("LOADING SEARCH AREA")
 print("=" * 70)
 
 search_area = gpd.read_file(SEARCH_AREA_GEOJSON)
-
 search_area = search_area.set_crs("EPSG:4326") if search_area.crs is None else search_area.to_crs("EPSG:4326")
 
 west, south, east, north = search_area.total_bounds
-
 print(f"Bounding Box → W:{west}, S:{south}, E:{east}, N:{north}")
-
 
 # ============================================================
 # LOAD AOI (POLYGON FILTER)
@@ -66,22 +60,17 @@ print("LOADING AOI")
 print("=" * 70)
 
 aoi = gpd.read_file(AOI_GEOJSON)
-
 aoi = aoi.set_crs("EPSG:4326") if aoi.crs is None else aoi.to_crs("EPSG:4326")
 
 polygon = aoi.union_all()
-
 print("AOI Loaded")
-
 
 # ============================================================
 # TIME WINDOW
 # ============================================================
 
 utc_now = datetime.now(timezone.utc)
-
 utc_start = utc_now - timedelta(hours=LOOKBACK_HOURS)
-
 created_after = utc_start.replace(microsecond=0).isoformat()
 
 print("\n" + "=" * 70)
@@ -90,9 +79,8 @@ print("=" * 70)
 print(f"Now (UTC): {utc_now}")
 print(f"Since   : {created_after}")
 
-
 # ============================================================
-# API Configuration
+# API CONFIG
 # ============================================================
 
 url = "https://api.inaturalist.org/v1/observations"
@@ -102,12 +90,11 @@ headers = {
 }
 
 # ============================================================
-# Tracking Variables
+# TRACKING
 # ============================================================
 
 grand_total = 0
 species_counts = {}
-
 all_matches = []
 
 # ============================================================
@@ -118,7 +105,6 @@ print("\n" + "=" * 70)
 print("QUERYING INATURALIST")
 print("=" * 70)
 
-
 for species_name, taxon_id in SPECIES.items():
 
     print("\n" + "=" * 70)
@@ -127,11 +113,10 @@ for species_name, taxon_id in SPECIES.items():
 
     page = 1
     per_page = 200
-
     all_observations = []
 
     # ========================================================
-    # PAGINATION LOOP (ROBUST)
+    # PAGINATION LOOP
     # ========================================================
 
     while True:
@@ -148,7 +133,7 @@ for species_name, taxon_id in SPECIES.items():
         }
 
         try:
-            response = requests.get(url, params=params, timeout=60)
+            response = requests.get(url, params=params, headers=headers, timeout=60)
             response.raise_for_status()
 
             data = response.json()
@@ -162,7 +147,6 @@ for species_name, taxon_id in SPECIES.items():
 
             print(f"Page {page}: {len(batch)} results (total so far: {len(all_observations)})")
 
-            # STOP CONDITIONS
             if total_results and len(all_observations) >= total_results:
                 break
 
@@ -176,68 +160,59 @@ for species_name, taxon_id in SPECIES.items():
             all_observations = []
             break
 
-
     print(f"Total downloaded: {len(all_observations)}")
 
+    # ========================================================
+    # AOI FILTERING (FIXED SCOPE)
+    # ========================================================
 
-# ========================================================
-# AOI FILTERING
-# ========================================================
+    matches = []
 
-matches = []
+    for obs in all_observations:
 
-for obs in all_observations:
+        geojson = obs.get("geojson")
+        if not geojson or "coordinates" not in geojson:
+            continue
 
-    geojson = obs.get("geojson")
-    if not geojson or "coordinates" not in geojson:
-        continue
+        coords = geojson["coordinates"]
+        if not coords or len(coords) != 2:
+            continue
 
-    coords = geojson["coordinates"]
-    if not coords or len(coords) != 2:
-        continue
+        lon, lat = coords
+        point = Point(lon, lat)
 
-    lon, lat = coords
+        if point.within(polygon):
 
-    point = Point(lon, lat)
+            quality = obs.get("quality_grade", "unknown")
 
-    if point.within(polygon):
+            if quality == "needs_id":
+                priority = 1
+            elif quality == "research":
+                priority = 2
+            else:
+                priority = 3
 
-        # ----------------------------------------------------
-        # PRIORITY LOGIC (for sorting later)
-        # ----------------------------------------------------
-        quality = obs.get("quality_grade", "unknown")
-
-        if quality == "needs_id":
-            priority = 1
-        elif quality == "research":
-            priority = 2
-        else:
-            priority = 3
-
-        # ----------------------------------------------------
-        # STORE MATCH
-        # ----------------------------------------------------
-        matches.append({
-            "species": species_name,
-            "id": obs["id"],
-            "date": obs.get("observed_on", "Unknown"),
-            "observer": obs.get("user", {}).get("login", "Unknown"),
-            "quality_grade": quality,
-            "priority": priority,
-            "lat": lat,
-            "lon": lon,
-            "url": f"https://www.inaturalist.org/observations/{obs['id']}"
-        })
-
+            matches.append({
+                "species": species_name,
+                "id": obs["id"],
+                "date": obs.get("observed_on", "Unknown"),
+                "observer": obs.get("user", {}).get("login", "Unknown"),
+                "quality_grade": quality,
+                "priority": priority,
+                "lat": lat,
+                "lon": lon,
+                "url": f"https://www.inaturalist.org/observations/{obs['id']}"
+            })
 
     # ========================================================
-    # OUTPUT
+    # OUTPUT (FIXED SCOPE)
     # ========================================================
+
     matches.sort(key=lambda x: x["priority"])
+
     count = len(matches)
     species_counts[species_name] = count
     grand_total += count
-
     all_matches.extend(matches)
 
     print(f"\nMATCHES IN AOI: {count}")
@@ -251,7 +226,6 @@ for obs in all_observations:
         print(f"Quality: {obs['quality_grade']}")
         print(f"Coords: {obs['lat']:.5f}, {obs['lon']:.5f}")
         print(f"URL: {obs['url']}")
-
 
 # ============================================================
 # FINAL SUMMARY
@@ -268,59 +242,22 @@ print("\n" + "-" * 70)
 print(f"TOTAL OBSERVATIONS: {grand_total}")
 
 # ============================================================
-# EXPORT CSV
+# EXPORT CSV (SINGLE CLEAN VERSION)
 # ============================================================
-
-from datetime import datetime
 
 if all_matches:
 
     df = pd.DataFrame(all_matches)
 
     timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
-
     filename = f"observations_{timestamp}.csv"
 
-    df.to_csv(
-        filename,
-        index=False
-    )
+    df.to_csv(filename, index=False)
 
     print("\nCSV exported:")
     print(filename)
 
 else:
-
     print("\nNo observations to export.")
 
-# always runs
-print("\nFinished.")
-
-# ============================================================
-# EXPORT CSV
-# ============================================================
-
-from datetime import datetime
-
-if all_matches:
-
-    df = pd.DataFrame(all_matches)
-
-    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
-
-    filename = f"observations_{timestamp}.csv"
-
-    df.to_csv(
-        filename,
-        index=False
-    )
-
-    print("\nCSV exported:")
-    print(filename)
-
-else:
-
-    print("\nNo observations to export.")
-
-# always runs
 print("\nFinished.")
