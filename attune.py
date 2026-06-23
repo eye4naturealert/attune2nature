@@ -9,6 +9,16 @@ import pandas as pd
 from shapely.geometry import Point
 from datetime import datetime, timedelta, timezone
 
+import sys
+import io
+
+# ============================================================
+# OUTPUT CAPTURE (ADD THIS WRAPPER)
+# ============================================================
+
+output_buffer = io.StringIO()
+sys.stdout = output_buffer
+
 # ============================================================
 # CONFIG
 # ============================================================
@@ -224,3 +234,13 @@ else:
     print("\nNo observations to export.")
 
 print("\nFinished.")
+
+# ============================================================
+# RESTORE CONSOLE + EXTRACT OUTPUT
+# ============================================================
+
+sys.stdout = sys.__stdout__
+
+results_text = output_buffer.getvalue()
+
+print("EMAIL OUTPUT LENGTH:", len(results_text))
