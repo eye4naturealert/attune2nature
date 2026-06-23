@@ -9,6 +9,13 @@ jobs:
   run-script:
     runs-on: ubuntu-latest
 
+    # ============================================================
+    # 🔐 ADD THIS SECTION (SECRET INJECTION)
+    # ============================================================
+    env:
+      EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
