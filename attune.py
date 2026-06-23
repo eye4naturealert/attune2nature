@@ -12,6 +12,10 @@ from datetime import datetime, timedelta, timezone
 import sys
 import io
 
+import smtplib
+from email.mime.text import MIMEText
+import os
+
 # ============================================================
 # OUTPUT CAPTURE (ADD THIS WRAPPER)
 # ============================================================
@@ -43,6 +47,10 @@ headers = {
 grand_total = 0
 species_counts = {}
 all_matches = []
+
+EMAIL_ADDRESS = os.environ["EMAIL_ADDRESS"]
+EMAIL_PASSWORD = os.environ["EMAIL_PASSWORD"]
+TO_EMAIL = "curranrunz@yahoo.com"
 
 # ============================================================
 # LOAD AOI
@@ -244,3 +252,19 @@ sys.stdout = sys.__stdout__
 results_text = output_buffer.getvalue()
 
 print("EMAIL OUTPUT LENGTH:", len(results_text))
+
+# ============================================================
+# EMAIL RESULTS
+# ============================================================
+
+msg = MIMEText(results_text)
+
+msg["Subject"] = "Attune2Nature Daily Run Results"
+msg["From"] = EMAIL_ADDRESS
+msg["To"] = TO_EMAIL
+
+with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+    server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+    server.send_message(msg)
+
+print("Email sent successfully.")
