@@ -48,8 +48,12 @@ grand_total = 0
 species_counts = {}
 all_matches = []
 
-EMAIL_ADDRESS = os.environ["EMAIL_ADDRESS"]
-EMAIL_PASSWORD = os.environ["EMAIL_PASSWORD"]
+EMAIL_ADDRESS = os.getenv("GMAIL_USER")
+EMAIL_PASSWORD = os.getenv("GMAIL_APP_PASSWORD")
+
+if not EMAIL_ADDRESS or not EMAIL_PASSWORD:
+    raise ValueError("Missing EMAIL_ADDRESS or EMAIL_PASSWORD env vars")
+    
 TO_EMAIL = "curranrunz@yahoo.com"
 
 # ============================================================
