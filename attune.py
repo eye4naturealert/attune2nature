@@ -137,11 +137,7 @@ for species_name, taxon_id in SPECIES.items():
         if not geojson or "coordinates" not in geojson:
             continue
 
-        coords = geojson["coordinates"]
-        if not coords or len(coords) != 2:
-            continue
-
-        lon, lat = coords
+        lon, lat = geojson["coordinates"]
         point = Point(lon, lat)
 
         if point.within(polygon):
@@ -158,9 +154,9 @@ for species_name, taxon_id in SPECIES.items():
             matches.append({
                 "species": species_name,
                 "id": obs["id"],
+                "observer": obs.get("user", {}).get("login", "Unknown"),
                 "observed_on": obs.get("observed_on", "Unknown"),
                 "created_at": obs.get("created_at", "Unknown"),
-                "observer": obs.get("user", {}).get("login", "Unknown"),
                 "quality_grade": quality,
                 "priority": priority,
                 "lat": lat,
@@ -198,35 +194,75 @@ print("=" * 70)
 for species, count in species_counts.items():
     print(f"{species}: {count}")
 
-print("\n" + "-" * 70)
-print(f"TOTAL OBSERVATIONS: {grand_total}")
+print(f"\nTOTAL OBSERVATIONS: {grand_total}")
 
 # ============================================================
 # EXPORT CSV
 # ============================================================
 
 if all_matches:
-
     df = pd.DataFrame(all_matches)
     timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
     filename = f"observations_{timestamp}.csv"
-
     df.to_csv(filename, index=False)
-
-    print("\nCSV exported:")
-    print(filename)
-
+    print("\nCSV exported:", filename)
 else:
     print("\nNo observations to export.")
 
 print("\nFinished.")
 
 # ============================================================
-# EMAIL (simple notification only)
+# EMAIL (HTML VERSION)
 # ============================================================
 
-msg = MIMEText("Attune2Nature run complete. Check GitHub Actions logs for details.")
-msg["Subject"] = "Attune2Nature Daily Run Results"
+rows = ""
+for species, count in species_counts.items():
+    rows += f"<tr><td>{species}</td><td>{count}</td></tr>"
+
+top_rows = ""
+for obs in all_matches[:10]:
+    top_rows += f"""
+    <tr>
+        <td>{obs['species']}</td>
+        <td>{obs['observer']}</td>
+        <td>{obs['lat']:.4f}, {obs['lon']:.4f}</td>
+        <td><a href="{obs['url']}">View</a></td>
+    </tr>
+    """
+
+html = f"""
+<html>
+  <body style="font-family: Arial, sans-serif;">
+    <h2>🐢 Attune2Nature Daily Report</h2>
+
+    <h3>Summary</h3>
+    <table border="1" cellpadding="6" cellspacing="0">
+      <tr><th>Species</th><th>Count</th></tr>
+      {rows}
+    </table>
+
+    <p><b>Total Observations:</b> {grand_total}</p>
+
+    <h3>Top Observations</h3>
+    <table border="1" cellpadding="6" cellspacing="0">
+      <tr>
+        <th>Species</th>
+        <th>Observer</th>
+        <th>Coordinates</th>
+        <th>Link</th>
+      </tr>
+      {top_rows}
+    </table>
+
+    <p style="color: gray; font-size: 12px;">
+      Generated automatically by Attune2Nature (GitHub Actions)
+    </p>
+  </body>
+</html>
+"""
+
+msg = MIMEText(html, "html")
+msg["Subject"] = "Attune2Nature Daily Run Report"
 msg["From"] = EMAIL_ADDRESS
 msg["To"] = TO_EMAIL
 
