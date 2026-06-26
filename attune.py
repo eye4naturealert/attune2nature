@@ -9,19 +9,9 @@ import pandas as pd
 from shapely.geometry import Point
 from datetime import datetime, timedelta, timezone
 
-import sys
-import io
-
 import smtplib
 from email.mime.text import MIMEText
 import os
-
-# ============================================================
-# OUTPUT CAPTURE (ADD THIS WRAPPER)
-# ============================================================
-
-output_buffer = io.StringIO()
-sys.stdout = output_buffer
 
 # ============================================================
 # CONFIG
@@ -53,7 +43,7 @@ EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
 if not EMAIL_ADDRESS or not EMAIL_PASSWORD:
     raise ValueError("Missing EMAIL_ADDRESS or EMAIL_PASSWORD env vars")
-    
+
 TO_EMAIL = "curranrunz@yahoo.com"
 
 # ============================================================
@@ -84,7 +74,7 @@ print("=" * 70)
 print(f"Since: {created_after}")
 
 # ============================================================
-# MAIN LOOP (PER SPECIES)
+# MAIN LOOP
 # ============================================================
 
 print("\n" + "=" * 70)
@@ -97,18 +87,11 @@ for species_name, taxon_id in SPECIES.items():
     print(f"SPECIES: {species_name}")
     print("=" * 70)
 
-    # --------------------------------------------------------
-    # RESET PER SPECIES (CRITICAL)
-    # --------------------------------------------------------
     all_observations = []
     matches = []
 
     page = 1
     per_page = 200
-
-    # ========================================================
-    # API PAGINATION
-    # ========================================================
 
     while True:
 
@@ -148,10 +131,6 @@ for species_name, taxon_id in SPECIES.items():
 
     print(f"Total downloaded: {len(all_observations)}")
 
-    # ========================================================
-    # AOI FILTERING
-    # ========================================================
-
     for obs in all_observations:
 
         geojson = obs.get("geojson")
@@ -189,10 +168,6 @@ for species_name, taxon_id in SPECIES.items():
                 "url": f"https://www.inaturalist.org/observations/{obs['id']}"
             })
 
-    # ========================================================
-    # OUTPUT (PER SPECIES - FIXED SCOPE)
-    # ========================================================
-
     matches.sort(key=lambda x: x["priority"])
 
     count = len(matches)
@@ -203,7 +178,6 @@ for species_name, taxon_id in SPECIES.items():
     print(f"\nMATCHES IN AOI: {count}")
 
     for i, obs in enumerate(matches, start=1):
-
         print("\n" + "-" * 60)
         print(f"Observation #{i}")
         print(f"Observer: {obs['observer']}")
@@ -228,7 +202,7 @@ print("\n" + "-" * 70)
 print(f"TOTAL OBSERVATIONS: {grand_total}")
 
 # ============================================================
-# EXPORT CSV (SINGLE CLEAN BLOCK)
+# EXPORT CSV
 # ============================================================
 
 if all_matches:
@@ -248,21 +222,10 @@ else:
 print("\nFinished.")
 
 # ============================================================
-# RESTORE CONSOLE + EXTRACT OUTPUT
+# EMAIL (simple notification only)
 # ============================================================
 
-sys.stdout = sys.__stdout__
-
-results_text = output_buffer.getvalue()
-
-print("EMAIL OUTPUT LENGTH:", len(results_text))
-
-# ============================================================
-# EMAIL RESULTS
-# ============================================================
-
-msg = MIMEText(results_text)
-
+msg = MIMEText("Attune2Nature run complete. Check GitHub Actions logs for details.")
 msg["Subject"] = "Attune2Nature Daily Run Results"
 msg["From"] = EMAIL_ADDRESS
 msg["To"] = TO_EMAIL
