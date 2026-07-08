@@ -27,7 +27,6 @@ It uses iNaturalist data to detect recent species activity within a defined Area
 
 To create a “living awareness layer” over geography that helps people notice, understand, and reconnect with the natural world around them.
 
-attune2nature will help empower individual nature enthusiasts, conservation organizations, parks departments, and citizen science groups.
 ---
 
 Built with Python, GeoPandas, and iNaturalist API.
