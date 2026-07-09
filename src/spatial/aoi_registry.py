@@ -19,7 +19,7 @@ AOIS = {
 
         "name": "Washington & Old Dominion Trail",
 
-        "geometry": BASE_DIR / "data" / "aois" / "WOD_Buffer.geojson",
+        "geometry": BASE_DIR / "data" / "aois" / "OSM_W&OD_Trail_25mBuffer.geojson",
 
         "reference_layers": {
 
