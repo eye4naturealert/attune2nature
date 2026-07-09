@@ -14,7 +14,44 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 #AOI Registry Dictionary
 #--------------------------------------------------
 AOIS = {
-    ...
+
+    "wod": {
+
+        "name": "Washington & Old Dominion Trail",
+
+        "geometry": BASE_DIR / "data" / "aois" / "WOD_Buffer.geojson",
+
+        "reference_layers": {
+
+            "mile_markers":
+                BASE_DIR / "data" / "reference" / "WOD_MileMarkers.geojson"
+
+        }
+
+    },
+
+    "loudoun": {
+
+        "name": "Loudoun County",
+
+        "geometry":
+            BASE_DIR / "data" / "aois" / "LoudounCounty.geojson",
+
+        "reference_layers": {}
+
+    },
+
+    "fairfax": {
+
+        "name": "Fairfax County",
+
+        "geometry":
+            BASE_DIR / "data" / "aois" / "FairfaxCounty.geojson",
+
+        "reference_layers": {}
+
+    }
+
 }
 
 #--------------------------------------------------
