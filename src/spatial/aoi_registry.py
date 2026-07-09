@@ -75,4 +75,9 @@ def load_mile_markers():
 #--------------------------------------------------
 
 if __name__ == "__main__":
-    pass
+
+    print("Available AOIs:")
+
+    print(list_aois())
+
+    
