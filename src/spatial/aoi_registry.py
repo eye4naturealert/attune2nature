@@ -32,10 +32,10 @@ AOIS = {
 
     "loudoun": {
 
-        "name": "Loudoun County",
+        "name": "Loudon County",
 
         "geometry":
-            BASE_DIR / "data" / "aois" / "LoudounCounty.geojson",
+            BASE_DIR / "data" / "aois" / "LoudonCounty.geojson",
 
         "reference_layers": {}
 
@@ -59,13 +59,19 @@ AOIS = {
 #--------------------------------------------------
 
 def list_aois():
-    pass
+    return list(AOIS.keys())
   
-def get_aoi():
-    pass
+def get_aoi(name):
+    return AOIS.get(name)
   
-def load_geometry():
-    pass
+def load_geometry(name):
+
+    aoi = get_aoi(name)
+
+    if aoi is None:
+        raise ValueError(f"Unknown AOI: {name}")
+
+    return gpd.read_file(aoi["geometry"])
   
 def load_mile_markers():
     pass
@@ -74,10 +80,34 @@ def load_mile_markers():
 #Test Section
 #--------------------------------------------------
 
+#--------------------------------------------------
+#Test Section
+#--------------------------------------------------
+
 if __name__ == "__main__":
 
-    print("Available AOIs:")
+    print("Project Root:")
+    print(BASE_DIR)
 
+    print("\nAvailable AOIs:")
     print(list_aois())
 
-    
+    print("\nTesting get_aoi:")
+    print(get_aoi("loudoun"))
+
+    print("\nAOI Files:")
+
+    for key, aoi in AOIS.items():
+        print(key)
+        print(aoi["geometry"])
+        print("Exists:", aoi["geometry"].exists())
+        print()
+
+    print("\nLoading Loudoun geometry:")
+
+    loudoun = load_geometry("loudoun")
+
+    print(loudoun.head())
+
+    print("\nCRS:")
+    print(loudoun.crs)
