@@ -32,10 +32,10 @@ AOIS = {
 
     "loudoun": {
 
-        "name": "Loudon County",
+        "name": "Loudoun County",
 
         "geometry":
-            BASE_DIR / "data" / "aois" / "LoudonCounty.geojson",
+            BASE_DIR / "data" / "aois" / "LoudounCounty.geojson",
 
         "reference_layers": {}
 
@@ -47,6 +47,39 @@ AOIS = {
 
         "geometry":
             BASE_DIR / "data" / "aois" / "FairfaxCounty.geojson",
+
+        "reference_layers": {}
+
+    },
+
+    "arlington": {
+
+        "name": "Arlington County",
+
+        "geometry":
+            BASE_DIR / "data" / "aois" / "ArlingtonCounty.geojson",
+
+        "reference_layers": {}
+
+    },
+
+    "falls_church": {
+
+        "name": "Falls Church City",
+
+        "geometry":
+            BASE_DIR / "data" / "aois" / "FallsChurchCity.geojson",
+
+        "reference_layers": {}
+
+    },
+
+    "alexandria": {
+
+        "name": "Alexandria City",
+
+        "geometry":
+            BASE_DIR / "data" / "aois" / "AlexandriaCity.geojson",
 
         "reference_layers": {}
 
