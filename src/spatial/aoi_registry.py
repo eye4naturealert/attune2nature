@@ -136,11 +136,14 @@ if __name__ == "__main__":
         print("Exists:", aoi["geometry"].exists())
         print()
 
-    print("\nLoading Loudoun geometry:")
+print("\nTesting geometry loading:")
 
-    loudoun = load_geometry("loudoun")
+for aoi_name in list_aois():
 
-    print(loudoun.head())
+    print(f"\nLoading: {aoi_name}")
 
-    print("\nCRS:")
-    print(loudoun.crs)
+    gdf = load_geometry(aoi_name)
+
+    print("Rows:", len(gdf))
+    print("CRS:", gdf.crs)
+    print("Geometry type:", gdf.geometry.geom_type.iloc[0])
