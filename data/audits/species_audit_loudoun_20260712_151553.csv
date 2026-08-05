@@ -1,0 +1,4 @@
+aoi_key,aoi_name,species_key,common_name,scientific_name,taxon_id,group,subgroup,lookback_days,total_results,records_examined,public_count,public_percent,obscured_count,obscured_percent,accuracy_reported_count,accuracy_missing_count,median_gps_accuracy_m,public_accuracy_reported_count,public_median_gps_accuracy_m,alert_support
+loudoun,Loudoun County,american_black_bear,American Black Bear,Ursus americanus,41638,mammal,,365,14,14,14,100.0,0,0.0,13,1,15.0,13,15.0,precise_and_regional
+loudoun,Loudoun County,common_snapping_turtle,Common Snapping Turtle,Chelydra serpentina,39682,reptile,,365,58,58,54,93.1,4,6.9,52,6,17.5,48,17.5,precise_and_regional
+loudoun,Loudoun County,eastern_box_turtle,Eastern Box Turtle,Terrapene carolina,39814,reptile,,365,198,198,0,0.0,198,100.0,171,27,14.0,0,,regional_only
