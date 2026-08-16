@@ -313,8 +313,96 @@ SPECIES = {
         "subgroup": "Wetland Birds",
         "active": True
 
-    }
+    },
 
+    #--------------------------------------------------
+    # MAMMALS - Large Mammals
+    #--------------------------------------------------
+
+    "american_black_bear": {
+
+        "common_name": "American Black Bear",
+        "scientific_name": "Ursus americanus",
+        "taxon_id": 41638,
+        "group": "Mammals",
+        "subgroup": "Large Mammals",
+        "active": True
+
+    },
+
+    "white_tailed_deer": {
+
+        "common_name": "White-tailed Deer",
+        "scientific_name": "Odocoileus virginianus",
+        "taxon_id": 42223,
+        "group": "Mammals",
+        "subgroup": "Large Mammals",
+        "active": True
+
+    },
+
+    #--------------------------------------------------
+    # MAMMALS - Medium Mammals
+    #--------------------------------------------------
+
+    "bobcat": {
+
+        "common_name": "Bobcat",
+        "scientific_name": "Lynx rufus",
+        "taxon_id": 41976,
+        "group": "Mammals",
+        "subgroup": "Medium Mammals",
+        "active": True
+
+    },
+
+    "red_fox": {
+
+        "common_name": "Red Fox",
+        "scientific_name": "Vulpes vulpes",
+        "taxon_id": 42069,
+        "group": "Mammals",
+        "subgroup": "Medium Mammals",
+        "active": True
+
+    },
+
+    "coyote": {
+
+        "common_name": "Coyote",
+        "scientific_name": "Canis latrans",
+        "taxon_id": 42051,
+        "group": "Mammals",
+        "subgroup": "Medium Mammals",
+        "active": True
+
+    },
+
+    #--------------------------------------------------
+    # MAMMALS - Aquatic Mammals
+    #--------------------------------------------------
+
+    "north_american_beaver": {
+
+        "common_name": "North American Beaver",
+        "scientific_name": "Castor canadensis",
+        "taxon_id": 43794,
+        "group": "Mammals",
+        "subgroup": "Aquatic Mammals",
+        "active": True
+
+    },
+
+    "north_american_river_otter": {
+
+        "common_name": "North American River Otter",
+        "scientific_name": "Lontra canadensis",
+        "taxon_id": 41774,
+        "group": "Mammals",
+        "subgroup": "Aquatic Mammals",
+        "active": True
+
+    }
 }
 
 #--------------------------------------------------
