@@ -124,8 +124,70 @@ SPECIES = {
         "subgroup": "Lizards",
         "active": True
 
-    }
+    },
 
+    #--------------------------------------------------
+    # AMPHIBIANS - Salamanders
+    #--------------------------------------------------
+
+    "eastern_newt": {
+
+        "common_name": "Eastern Newt",
+        "scientific_name": "Notophthalmus viridescens",
+        "taxon_id": 27681,
+        "group": "Amphibians",
+        "subgroup": "Salamanders",
+        "active": True
+
+    },
+
+    "eastern_hellbender": {
+
+        "common_name": "Eastern Hellbender",
+        "scientific_name": "Cryptobranchus alleganiensis",
+        "taxon_id": 26793,
+        "group": "Amphibians",
+        "subgroup": "Salamanders",
+        "active": True
+
+    },
+
+    #--------------------------------------------------
+    # AMPHIBIANS - Frogs & Toads
+    #--------------------------------------------------
+
+    "american_bullfrog": {
+
+        "common_name": "American Bullfrog",
+        "scientific_name": "Lithobates catesbeianus",
+        "taxon_id": 65979,
+        "group": "Amphibians",
+        "subgroup": "Frogs & Toads",
+        "active": True
+
+    },
+
+    "american_toad": {
+
+        "common_name": "American Toad",
+        "scientific_name": "Anaxyrus americanus",
+        "taxon_id": 64968,
+        "group": "Amphibians",
+        "subgroup": "Frogs & Toads",
+        "active": True
+
+    },
+
+    "spring_peeper": {
+
+        "common_name": "Spring Peeper",
+        "scientific_name": "Pseudacris crucifer",
+        "taxon_id": 24267,
+        "group": "Amphibians",
+        "subgroup": "Frogs & Toads",
+        "active": True
+
+    }
 }
 #--------------------------------------------------
 # Helper Functions
