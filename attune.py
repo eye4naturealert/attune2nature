@@ -17,8 +17,8 @@ import os
 # CONFIG
 # ============================================================
 
-SEARCH_AREA_GEOJSON = "data/aoi/LoudounCounty.geojson"
-AOI_GEOJSON = "data/aoi/LoudounCounty.geojson"
+SEARCH_AREA_GEOJSON = "data/aois/LoudounCounty.geojson"
+AOI_GEOJSON = "data/aois/LoudounCounty.geojson"
 
 SPECIES = {
     "Eastern Box Turtle": 39814,
