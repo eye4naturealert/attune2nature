@@ -402,6 +402,110 @@ SPECIES = {
         "subgroup": "Aquatic Mammals",
         "active": True
 
+    },
+
+    #--------------------------------------------------
+    # INVERTEBRATES - Dragonflies & Damselflies
+    #--------------------------------------------------
+
+    "dragonhunter": {
+
+        "common_name": "Dragonhunter",
+        "scientific_name": "Hagenius brevistylus",
+        "taxon_id": 102035,
+        "group": "Invertebrates",
+        "subgroup": "Dragonflies & Damselflies",
+        "active": True
+
+    },
+
+    "eastern_pondhawk": {
+
+        "common_name": "Eastern Pondhawk",
+        "scientific_name": "Erythemis simplicicollis",
+        "taxon_id": 100430,
+        "group": "Invertebrates",
+        "subgroup": "Dragonflies & Damselflies",
+        "active": True
+
+    },
+
+    "ebony_jewelwing": {
+
+        "common_name": "Ebony Jewelwing",
+        "scientific_name": "Calopteryx maculata",
+        "taxon_id": 84481,
+        "group": "Invertebrates",
+        "subgroup": "Dragonflies & Damselflies",
+        "active": True
+
+    },
+
+    #--------------------------------------------------
+    # INVERTEBRATES - Butterflies & Moths
+    #--------------------------------------------------
+
+    "monarch_butterfly": {
+
+        "common_name": "Monarch Butterfly",
+        "scientific_name": "Danaus plexippus",
+        "taxon_id": 48662,
+        "group": "Invertebrates",
+        "subgroup": "Butterflies & Moths",
+        "active": True
+
+    },
+
+    "luna_moth": {
+
+        "common_name": "Luna Moth",
+        "scientific_name": "Actias luna",
+        "taxon_id": 47916,
+        "group": "Invertebrates",
+        "subgroup": "Butterflies & Moths",
+        "active": True
+
+    },
+
+    #--------------------------------------------------
+    # INVERTEBRATES - Mantids
+    #--------------------------------------------------
+
+    "carolina_mantis": {
+
+        "common_name": "Carolina Mantis",
+        "scientific_name": "Stagmomantis carolina",
+        "taxon_id": 119989,
+        "group": "Invertebrates",
+        "subgroup": "Mantids",
+        "active": True
+
+    },
+
+    #--------------------------------------------------
+    # INVERTEBRATES - Invasive Species
+    #--------------------------------------------------
+
+    "spotted_lanternfly": {
+
+        "common_name": "Spotted Lanternfly",
+        "scientific_name": "Lycorma delicatula",
+        "taxon_id": 324726,
+        "group": "Invertebrates",
+        "subgroup": "Invasive Species",
+        "active": True
+
+    },
+
+    "joro_spider": {
+
+        "common_name": "Joro Spider",
+        "scientific_name": "Trichonephila clavata",
+        "taxon_id": 904334,
+        "group": "Invertebrates",
+        "subgroup": "Invasive Species",
+        "active": True
+
     }
 }
 
