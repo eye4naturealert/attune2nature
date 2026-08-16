@@ -680,6 +680,135 @@ SPECIES = {
         "subgroup": "Invasive Plants",
         "active": True
 
+    },
+
+    #--------------------------------------------------
+    # FUNGI
+    #--------------------------------------------------
+
+    "lions_mane": {
+
+        "common_name": "Lion's Mane",
+        "scientific_name": "Hericium erinaceus",
+        "taxon_id": 49158,
+        "group": "Fungi",
+        "subgroup": "Fungi",
+        "active": True
+
+    },
+
+    "indigo_milkcap": {
+
+        "common_name": "Indigo Milkcap",
+        "scientific_name": "Lactarius indigo",
+        "taxon_id": 48539,
+        "group": "Fungi",
+        "subgroup": "Fungi",
+        "active": True
+
+    },
+
+    "devils_urn": {
+
+        "common_name": "Devil's Urn",
+        "scientific_name": "Urnula craterium",
+        "taxon_id": 125669,
+        "group": "Fungi",
+        "subgroup": "Fungi",
+        "active": True
+
+    },
+
+    "jack_o_lantern": {
+
+        "common_name": "Jack-o'-Lantern Mushroom",
+        "scientific_name": "Omphalotus illudens",
+        "taxon_id": 125671,
+        "group": "Fungi",
+        "subgroup": "Fungi",
+        "active": True
+
+    },
+
+    "octopus_stinkhorn": {
+
+        "common_name": "Octopus Stinkhorn",
+        "scientific_name": "Clathrus archeri",
+        "taxon_id": 194134,
+        "group": "Fungi",
+        "subgroup": "Fungi",
+        "active": True
+
+    },
+
+    "chicken_of_the_woods": {
+
+        "common_name": "Chicken of the Woods",
+        "scientific_name": "Laetiporus sulphureus",
+        "taxon_id": 53713,
+        "group": "Fungi",
+        "subgroup": "Fungi",
+        "active": True
+
+    },
+
+    #--------------------------------------------------
+    # FISH - Freshwater Fish
+    #--------------------------------------------------
+
+    "brook_trout": {
+
+        "common_name": "Brook Trout",
+        "scientific_name": "Salvelinus fontinalis",
+        "taxon_id": 61209,
+        "group": "Fish",
+        "subgroup": "Freshwater Fish",
+        "active": True
+
+    },
+
+    "largemouth_bass": {
+
+        "common_name": "Largemouth Bass",
+        "scientific_name": "Micropterus salmoides",
+        "taxon_id": 49165,
+        "group": "Fish",
+        "subgroup": "Freshwater Fish",
+        "active": True
+
+    },
+
+    "bluegill": {
+
+        "common_name": "Bluegill",
+        "scientific_name": "Lepomis macrochirus",
+        "taxon_id": 58719,
+        "group": "Fish",
+        "subgroup": "Freshwater Fish",
+        "active": True
+
+    },
+
+    "chain_pickerel": {
+
+        "common_name": "Chain Pickerel",
+        "scientific_name": "Esox niger",
+        "taxon_id": 58739,
+        "group": "Fish",
+        "subgroup": "Freshwater Fish",
+        "active": True
+
+    },
+
+    "longnose_gar": {
+
+        "common_name": "Longnose Gar",
+        "scientific_name": "Lepisosteus osseus",
+        "taxon_id": 58698,
+        "group": "Fish",
+        "subgroup": "Freshwater Fish",
+        "active": True
+
     }
 }
 
