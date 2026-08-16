@@ -506,6 +506,180 @@ SPECIES = {
         "subgroup": "Invasive Species",
         "active": True
 
+    },
+
+    #--------------------------------------------------
+    # PLANTS - Spring Wildflowers
+    #--------------------------------------------------
+
+    "virginia_bluebells": {
+
+        "common_name": "Virginia Bluebells",
+        "scientific_name": "Mertensia virginica",
+        "taxon_id": 59771,
+        "group": "Plants",
+        "subgroup": "Spring Wildflowers",
+        "active": True
+
+    },
+
+    "bloodroot": {
+
+        "common_name": "Bloodroot",
+        "scientific_name": "Sanguinaria canadensis",
+        "taxon_id": 51044,
+        "group": "Plants",
+        "subgroup": "Spring Wildflowers",
+        "active": True
+
+    },
+
+    "twinleaf": {
+
+        "common_name": "Twinleaf",
+        "scientific_name": "Jeffersonia diphylla",
+        "taxon_id": 147037,
+        "group": "Plants",
+        "subgroup": "Spring Wildflowers",
+        "active": True
+
+    },
+
+    "eastern_skunk_cabbage": {
+
+        "common_name": "Eastern Skunk Cabbage",
+        "scientific_name": "Symplocarpus foetidus",
+        "taxon_id": 48961,
+        "group": "Plants",
+        "subgroup": "Spring Wildflowers",
+        "active": True
+
+    },
+
+    #--------------------------------------------------
+    # PLANTS - Forest Plants
+    #--------------------------------------------------
+
+    "ghost_pipe": {
+
+        "common_name": "Ghost Pipe",
+        "scientific_name": "Monotropa uniflora",
+        "taxon_id": 49477,
+        "group": "Plants",
+        "subgroup": "Forest Plants",
+        "active": True
+
+    },
+
+    "common_pawpaw": {
+
+        "common_name": "Common Pawpaw",
+        "scientific_name": "Asimina triloba",
+        "taxon_id": 50897,
+        "group": "Plants",
+        "subgroup": "Forest Plants",
+        "active": True
+
+    },
+
+    #--------------------------------------------------
+    # PLANTS - Native Pollinator Plants
+    #--------------------------------------------------
+
+    "common_milkweed": {
+
+        "common_name": "Common Milkweed",
+        "scientific_name": "Asclepias syriaca",
+        "taxon_id": 47911,
+        "group": "Plants",
+        "subgroup": "Native Pollinator Plants",
+        "active": True
+
+    },
+
+    "butterfly_weed": {
+
+        "common_name": "Butterfly Weed",
+        "scientific_name": "Asclepias tuberosa",
+        "taxon_id": 47912,
+        "group": "Plants",
+        "subgroup": "Native Pollinator Plants",
+        "active": True
+
+    },
+
+    #--------------------------------------------------
+    # PLANTS - Wetland Plants
+    #--------------------------------------------------
+
+    "american_lotus": {
+
+        "common_name": "American Lotus",
+        "scientific_name": "Nelumbo lutea",
+        "taxon_id": 84160,
+        "group": "Plants",
+        "subgroup": "Wetland Plants",
+        "active": True
+
+    },
+
+    "cardinal_flower": {
+
+        "common_name": "Cardinal Flower",
+        "scientific_name": "Lobelia cardinalis",
+        "taxon_id": 48038,
+        "group": "Plants",
+        "subgroup": "Wetland Plants",
+        "active": True
+
+    },
+
+    #--------------------------------------------------
+    # PLANTS - Invasive Plants
+    #--------------------------------------------------
+
+    "golden_bamboo": {
+
+        "common_name": "Golden Bamboo",
+        "scientific_name": "Phyllostachys aurea",
+        "taxon_id": 78563,
+        "group": "Plants",
+        "subgroup": "Invasive Plants",
+        "active": True
+
+    },
+
+    "japanese_honeysuckle": {
+
+        "common_name": "Japanese Honeysuckle",
+        "scientific_name": "Lonicera japonica",
+        "taxon_id": 77835,
+        "group": "Plants",
+        "subgroup": "Invasive Plants",
+        "active": True
+
+    },
+
+    "amur_honeysuckle": {
+
+        "common_name": "Amur Honeysuckle",
+        "scientific_name": "Lonicera maackii",
+        "taxon_id": 82342,
+        "group": "Plants",
+        "subgroup": "Invasive Plants",
+        "active": True
+
+    },
+
+    "multiflora_rose": {
+
+        "common_name": "Multiflora Rose",
+        "scientific_name": "Rosa multiflora",
+        "taxon_id": 78882,
+        "group": "Plants",
+        "subgroup": "Invasive Plants",
+        "active": True
+
     }
 }
 
