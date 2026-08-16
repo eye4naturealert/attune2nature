@@ -4,16 +4,57 @@
 
 SPECIES = {
 
-    "eastern_box_turtle": {
+    #--------------------------------------------------
+    # REPTILES - Snakes
+    #--------------------------------------------------
 
-        "common_name": "Eastern Box Turtle",
-        "scientific_name": "Terrapene carolina",
-        "taxon_id": 39814,
+    "rainbow_snake": {
+
+        "common_name": "Rainbow Snake",
+        "scientific_name": "Farancia erytrogramma",
+        "taxon_id": 30103,
         "group": "Reptiles",
-        "subgroup": "Turtles",
+        "subgroup": "Snakes",
         "active": True
 
     },
+
+    "eastern_copperhead": {
+
+        "common_name": "Eastern Copperhead",
+        "scientific_name": "Agkistrodon contortrix",
+        "taxon_id": 30764,
+        "group": "Reptiles",
+        "subgroup": "Snakes",
+        "active": True
+
+    },
+
+    "northern_watersnake": {
+
+        "common_name": "Northern Watersnake",
+        "scientific_name": "Nerodia sipedon",
+        "taxon_id": 29305,
+        "group": "Reptiles",
+        "subgroup": "Snakes",
+        "active": True
+
+    },
+
+    "eastern_ratsnake": {
+
+        "common_name": "Eastern Ratsnake",
+        "scientific_name": "Pantherophis alleghaniensis",
+        "taxon_id": 59644,
+        "group": "Reptiles",
+        "subgroup": "Snakes",
+        "active": True
+
+    },
+
+    #--------------------------------------------------
+    # REPTILES - Turtles
+    #--------------------------------------------------
 
     "common_snapping_turtle": {
 
@@ -26,19 +67,66 @@ SPECIES = {
 
     },
 
-    "american_black_bear": {
+    "eastern_box_turtle": {
 
-        "common_name": "American Black Bear",
-        "scientific_name": "Ursus americanus",
-        "taxon_id": 41638,
-        "group": "Mammals",
-        "subgroup": "Large Mammals",
+        "common_name": "Eastern Box Turtle",
+        "scientific_name": "Terrapene carolina",
+        "taxon_id": 39814,
+        "group": "Reptiles",
+        "subgroup": "Turtles",
+        "active": True
+
+    },
+
+    "painted_turtle": {
+
+        "common_name": "Painted Turtle",
+        "scientific_name": "Chrysemys picta",
+        "taxon_id": 39735,
+        "group": "Reptiles",
+        "subgroup": "Turtles",
+        "active": True
+
+    },
+
+    "northern_diamondback_terrapin": {
+
+        "common_name": "Northern Diamond-backed Terrapin",
+        "scientific_name": "Malaclemys terrapin",
+        "taxon_id": 39722,
+        "group": "Reptiles",
+        "subgroup": "Turtles",
+        "active": True
+
+    },
+
+    #--------------------------------------------------
+    # REPTILES - Lizards
+    #--------------------------------------------------
+
+    "five_lined_skink": {
+
+        "common_name": "Common Five-lined Skink",
+        "scientific_name": "Plestiodon fasciatus",
+        "taxon_id": 36390,
+        "group": "Reptiles",
+        "subgroup": "Lizards",
+        "active": True
+
+    },
+
+    "eastern_fence_lizard": {
+
+        "common_name": "Eastern Fence Lizard",
+        "scientific_name": "Sceloporus undulatus",
+        "taxon_id": 36137,
+        "group": "Reptiles",
+        "subgroup": "Lizards",
         "active": True
 
     }
 
 }
-
 #--------------------------------------------------
 # Helper Functions
 #--------------------------------------------------
@@ -140,7 +228,7 @@ if __name__ == "__main__":
     print(get_species("eastern_box_turtle"))
 
     print("\nTesting get_taxon_id():")
-    print(get_taxon_id("american_black_bear"))
+    print(get_taxon_id("eastern_box_turtle"))
 
     print("\nWebsite dropdown options:")
     print(get_species_dropdown_options())
