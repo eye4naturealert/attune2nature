@@ -187,8 +187,136 @@ SPECIES = {
         "subgroup": "Frogs & Toads",
         "active": True
 
+    },
+
+    #--------------------------------------------------
+    # BIRDS - Raptors
+    #--------------------------------------------------
+
+    "bald_eagle": {
+
+        "common_name": "Bald Eagle",
+        "scientific_name": "Haliaeetus leucocephalus",
+        "taxon_id": 5305,
+        "group": "Birds",
+        "subgroup": "Raptors",
+        "active": True
+
+    },
+
+    "osprey": {
+
+        "common_name": "Osprey",
+        "scientific_name": "Pandion haliaetus",
+        "taxon_id": 116999,
+        "group": "Birds",
+        "subgroup": "Raptors",
+        "active": True
+
+    },
+
+    "coopers_hawk": {
+
+        "common_name": "Cooper's Hawk",
+        "scientific_name": "Astur cooperii",
+        "taxon_id": 1579017,
+        "group": "Birds",
+        "subgroup": "Raptors",
+        "active": True
+
+    },
+
+    "peregrine_falcon": {
+
+        "common_name": "Peregrine Falcon",
+        "scientific_name": "Falco peregrinus",
+        "taxon_id": 4647,
+        "group": "Birds",
+        "subgroup": "Raptors",
+        "active": True
+
+    },
+
+    #--------------------------------------------------
+    # BIRDS - Owls
+    #--------------------------------------------------
+
+    "barred_owl": {
+
+        "common_name": "Barred Owl",
+        "scientific_name": "Strix varia",
+        "taxon_id": 19893,
+        "group": "Birds",
+        "subgroup": "Owls",
+        "active": True
+
+    },
+
+    "great_horned_owl": {
+
+        "common_name": "Great Horned Owl",
+        "scientific_name": "Bubo virginianus",
+        "taxon_id": 20044,
+        "group": "Birds",
+        "subgroup": "Owls",
+        "active": True
+
+    },
+
+    #--------------------------------------------------
+    # BIRDS - Woodland Birds
+    #--------------------------------------------------
+
+    "pileated_woodpecker": {
+
+        "common_name": "Pileated Woodpecker",
+        "scientific_name": "Dryocopus pileatus",
+        "taxon_id": 17855,
+        "group": "Birds",
+        "subgroup": "Woodland Birds",
+        "active": True
+
+    },
+
+    "baltimore_oriole": {
+
+        "common_name": "Baltimore Oriole",
+        "scientific_name": "Icterus galbula",
+        "taxon_id": 9346,
+        "group": "Birds",
+        "subgroup": "Woodland Birds",
+        "active": True
+
+    },
+
+    "ruby_throated_hummingbird": {
+
+        "common_name": "Ruby-throated Hummingbird",
+        "scientific_name": "Archilochus colubris",
+        "taxon_id": 6432,
+        "group": "Birds",
+        "subgroup": "Woodland Birds",
+        "active": True
+
+    },
+
+    #--------------------------------------------------
+    # BIRDS - Wetland Birds
+    #--------------------------------------------------
+
+    "great_blue_heron": {
+
+        "common_name": "Great Blue Heron",
+        "scientific_name": "Ardea herodias",
+        "taxon_id": 4956,
+        "group": "Birds",
+        "subgroup": "Wetland Birds",
+        "active": True
+
     }
+
 }
+
 #--------------------------------------------------
 # Helper Functions
 #--------------------------------------------------
