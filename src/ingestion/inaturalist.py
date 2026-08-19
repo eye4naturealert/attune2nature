@@ -714,7 +714,7 @@ if __name__ == "__main__":
     # Change these values to test another
     # AOI and species combination.
     aoi_name = "loudoun"
-    species_name = "common_snapping_turtle"
+    species_name = "bald_eagle"
 
     # 8760 hours = 365 days
     lookback_hours = 8760
