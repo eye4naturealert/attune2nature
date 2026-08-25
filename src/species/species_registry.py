@@ -23,7 +23,7 @@ SPECIES = {
 
         "common_name": "Eastern Copperhead",
         "scientific_name": "Agkistrodon contortrix",
-        "taxon_id": 30764,
+        "taxon_id": 912622,
         "group": "Reptiles",
         "subgroup": "Snakes",
         "active": True
@@ -82,7 +82,7 @@ SPECIES = {
 
         "common_name": "Painted Turtle",
         "scientific_name": "Chrysemys picta",
-        "taxon_id": 39735,
+        "taxon_id": 39771,
         "group": "Reptiles",
         "subgroup": "Turtles",
         "active": True
@@ -93,7 +93,7 @@ SPECIES = {
 
         "common_name": "Northern Diamond-backed Terrapin",
         "scientific_name": "Malaclemys terrapin",
-        "taxon_id": 39722,
+        "taxon_id": 39836,
         "group": "Reptiles",
         "subgroup": "Turtles",
         "active": True
@@ -108,7 +108,7 @@ SPECIES = {
 
         "common_name": "Common Five-lined Skink",
         "scientific_name": "Plestiodon fasciatus",
-        "taxon_id": 36390,
+        "taxon_id": 73788,
         "group": "Reptiles",
         "subgroup": "Lizards",
         "active": True
@@ -119,7 +119,7 @@ SPECIES = {
 
         "common_name": "Eastern Fence Lizard",
         "scientific_name": "Sceloporus undulatus",
-        "taxon_id": 36137,
+        "taxon_id": 36142,
         "group": "Reptiles",
         "subgroup": "Lizards",
         "active": True
@@ -134,7 +134,7 @@ SPECIES = {
 
         "common_name": "Eastern Newt",
         "scientific_name": "Notophthalmus viridescens",
-        "taxon_id": 27681,
+        "taxon_id": 27805,
         "group": "Amphibians",
         "subgroup": "Salamanders",
         "active": True
@@ -145,7 +145,7 @@ SPECIES = {
 
         "common_name": "Eastern Hellbender",
         "scientific_name": "Cryptobranchus alleganiensis",
-        "taxon_id": 26793,
+        "taxon_id": 26804,
         "group": "Amphibians",
         "subgroup": "Salamanders",
         "active": True
@@ -182,7 +182,7 @@ SPECIES = {
 
         "common_name": "Spring Peeper",
         "scientific_name": "Pseudacris crucifer",
-        "taxon_id": 24267,
+        "taxon_id": 24268,
         "group": "Amphibians",
         "subgroup": "Frogs & Toads",
         "active": True
@@ -397,7 +397,7 @@ SPECIES = {
 
         "common_name": "North American River Otter",
         "scientific_name": "Lontra canadensis",
-        "taxon_id": 41774,
+        "taxon_id": 41777,
         "group": "Mammals",
         "subgroup": "Aquatic Mammals",
         "active": True
@@ -412,7 +412,7 @@ SPECIES = {
 
         "common_name": "Dragonhunter",
         "scientific_name": "Hagenius brevistylus",
-        "taxon_id": 102035,
+        "taxon_id": 102006,
         "group": "Invertebrates",
         "subgroup": "Dragonflies & Damselflies",
         "active": True
@@ -423,7 +423,7 @@ SPECIES = {
 
         "common_name": "Eastern Pondhawk",
         "scientific_name": "Erythemis simplicicollis",
-        "taxon_id": 100430,
+        "taxon_id": 61495,
         "group": "Invertebrates",
         "subgroup": "Dragonflies & Damselflies",
         "active": True
@@ -701,7 +701,7 @@ SPECIES = {
 
         "common_name": "Indigo Milkcap",
         "scientific_name": "Lactarius indigo",
-        "taxon_id": 48539,
+        "taxon_id": 120951,
         "group": "Fungi",
         "subgroup": "Fungi",
         "active": True
@@ -712,7 +712,7 @@ SPECIES = {
 
         "common_name": "Devil's Urn",
         "scientific_name": "Urnula craterium",
-        "taxon_id": 125669,
+        "taxon_id": 58709,
         "group": "Fungi",
         "subgroup": "Fungi",
         "active": True
@@ -723,7 +723,7 @@ SPECIES = {
 
         "common_name": "Jack-o'-Lantern Mushroom",
         "scientific_name": "Omphalotus illudens",
-        "taxon_id": 125671,
+        "taxon_id": 126831,
         "group": "Fungi",
         "subgroup": "Fungi",
         "active": True
@@ -734,7 +734,7 @@ SPECIES = {
 
         "common_name": "Octopus Stinkhorn",
         "scientific_name": "Clathrus archeri",
-        "taxon_id": 194134,
+        "taxon_id": 51135,
         "group": "Fungi",
         "subgroup": "Fungi",
         "active": True
@@ -760,7 +760,7 @@ SPECIES = {
 
         "common_name": "Brook Trout",
         "scientific_name": "Salvelinus fontinalis",
-        "taxon_id": 61209,
+        "taxon_id": 49596,
         "group": "Fish",
         "subgroup": "Freshwater Fish",
         "active": True
@@ -771,7 +771,7 @@ SPECIES = {
 
         "common_name": "Largemouth Bass",
         "scientific_name": "Micropterus salmoides",
-        "taxon_id": 49165,
+        "taxon_id": 49587,
         "group": "Fish",
         "subgroup": "Freshwater Fish",
         "active": True
@@ -782,7 +782,7 @@ SPECIES = {
 
         "common_name": "Bluegill",
         "scientific_name": "Lepomis macrochirus",
-        "taxon_id": 58719,
+        "taxon_id": 49591,
         "group": "Fish",
         "subgroup": "Freshwater Fish",
         "active": True
@@ -793,7 +793,7 @@ SPECIES = {
 
         "common_name": "Chain Pickerel",
         "scientific_name": "Esox niger",
-        "taxon_id": 58739,
+        "taxon_id": 51367,
         "group": "Fish",
         "subgroup": "Freshwater Fish",
         "active": True
@@ -804,7 +804,7 @@ SPECIES = {
 
         "common_name": "Longnose Gar",
         "scientific_name": "Lepisosteus osseus",
-        "taxon_id": 58698,
+        "taxon_id": 58609,
         "group": "Fish",
         "subgroup": "Freshwater Fish",
         "active": True

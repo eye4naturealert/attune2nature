@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 
 
+
 #--------------------------------------------------
 # Allow Imports from the src Folder
 #--------------------------------------------------
@@ -17,11 +18,34 @@ if str(SRC_DIR) not in sys.path:
 
 
 from ingestion.inaturalist import fetch_observations_for_aoi
-
+from species.species_registry import get_species
 
 #--------------------------------------------------
 # Alert Logic
 #--------------------------------------------------
+
+def build_alert_result(
+    aoi_key: str,
+    species_key: str,
+    species: dict,
+    observations: list
+) -> dict:
+    """
+    Build a structured result for the alert system.
+    """
+
+    observation_count = len(observations)
+
+    return {
+        "aoi": aoi_key,
+        "species": species_key,
+        "common_name": species["common_name"],
+        "scientific_name": species["scientific_name"],
+        "taxon_id": species["taxon_id"],
+        "observation_count": observation_count,
+        "should_send_alert": observation_count > 0,
+        "observations": observations
+    }
 
 def should_send_alert(
     observations: list[dict]
@@ -35,7 +59,6 @@ def should_send_alert(
     """
 
     return len(observations) > 0
-
 
 #--------------------------------------------------
 # Test Section
@@ -61,8 +84,15 @@ if __name__ == "__main__":
         "observations"
     ]
 
-    alert = should_send_alert(
-        observations
+    selected_species = get_species(
+    species_name
+    )
+
+    alert_result = build_alert_result(
+    aoi_key=aoi_name,
+    species_key=species_name,
+    species=selected_species,
+    observations=observations
     )
 
     print("\nALERT TEST")
@@ -70,20 +100,25 @@ if __name__ == "__main__":
 
     print(
         "AOI:",
-        aoi_name
+        alert_result["aoi"]
     )
 
     print(
         "Species:",
-        species_name
+        alert_result["species"]
+    )
+
+    print(
+        "Common Name:",
+        alert_result["common_name"]
     )
 
     print(
         "Observations:",
-        len(observations)
+        alert_result["observation_count"]
     )
 
     print(
         "Should send alert:",
-        alert
+        alert_result["should_send_alert"]
     )
