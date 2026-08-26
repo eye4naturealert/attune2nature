@@ -94,14 +94,53 @@ def build_alert_result(
         "observations": formatted_observations
     }
 
+
+def run_alert(
+    aoi_name: str,
+    species_name: str,
+    lookback_hours: int
+) -> dict:
+    """
+    Run the complete Attune2Nature alert workflow
+    for one AOI and one species.
+    """
+
+    results = fetch_observations_for_aoi(
+        aoi_name=aoi_name,
+        species_name=species_name,
+        lookback_hours=lookback_hours
+    )
+
+    observations = results["observations"]
+
+    selected_aoi = get_aoi(
+        aoi_name
+    )
+
+    selected_species = get_species(
+        species_name
+    )
+
+    alert_result = build_alert_result(
+        aoi_key=aoi_name,
+        species_key=species_name,
+        aoi=selected_aoi,
+        species=selected_species,
+        observations=observations,
+        lookback_hours=lookback_hours
+    )
+
+    return alert_result
+
+
 #--------------------------------------------------
 # Test Section
 #--------------------------------------------------
 
 if __name__ == "__main__":
 
-    aoi_name = "wod"
-    species_name = "monarch_butterfly"
+    aoi_name = "loudoun"
+    species_name = "bald_eagle"
 
     # 24 hours
     lookback_hours = 24
