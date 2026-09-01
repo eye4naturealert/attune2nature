@@ -19,9 +19,9 @@ if str(SRC_DIR) not in sys.path:
 # Attune2Nature Imports
 #--------------------------------------------------
 
-from ingestion.inaturalist import fetch_observations_for_aoi
-from species.species_registry import get_species
-from spatial.aoi_registry import get_aoi
+from src.ingestion.inaturalist import fetch_observations_for_aoi
+from src.species.species_registry import get_species
+from src.spatial.aoi_registry import get_aoi
 
 #--------------------------------------------------
 # Alert Logic
@@ -223,16 +223,16 @@ if __name__ == "__main__":
     )
 
     print("\nMATCHING OBSERVATIONS")
-print("=" * 60)
+    print("=" * 60)
 
-for obs in alert_result["observations"]:
+    for obs in alert_result["observations"]:
 
-    print("\nObservation ID:", obs["observation_id"])
-    print("Observed On:", obs["observed_on"])
-    print("Uploaded:", obs["created_at"])
-    print("Quality Grade:", obs["quality_grade"])
-    print("Observer:", obs["observer"])
-    print("Latitude:", obs["latitude"])
-    print("Longitude:", obs["longitude"])
-    print("URL:", obs["url"])
+        print("\nObservation ID:", obs["observation_id"])
+        print("Observed On:", obs["observed_on"])
+        print("Uploaded:", obs["created_at"])
+        print("Quality Grade:", obs["quality_grade"])
+        print("Observer:", obs["observer"])
+        print("Latitude:", obs["latitude"])
+        print("Longitude:", obs["longitude"])
+        print("URL:", obs["url"])
     
