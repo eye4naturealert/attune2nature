@@ -15,6 +15,11 @@ def process_alert_request(
     time_interval: str
 ) -> dict:
 
+    if time_interval not in TIME_INTERVALS:
+        raise ValueError(
+            f"Invalid time interval: {time_interval}"
+        )
+
     interval = TIME_INTERVALS[time_interval]
 
     lookback_hours = interval["hours"]
