@@ -23,3 +23,18 @@ TIME_INTERVALS = {
         "hours": 720
     }
 }
+# --------------------------------------------------
+# Helper Functions
+# --------------------------------------------------
+
+def get_time_interval_options() -> list:
+
+    options = []
+
+    for key, interval in TIME_INTERVALS.items():
+        options.append({
+            "value": key,
+            "label": interval["label"]
+        })
+
+    return options

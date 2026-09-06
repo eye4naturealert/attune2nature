@@ -3,7 +3,9 @@
 # --------------------------------------------------
 
 from src.alert_logic import run_alert
-from src.backend.time_intervals import TIME_INTERVALS
+from src.backend.time_intervals import TIME_INTERVALS, get_time_interval_options
+from src.spatial.aoi_registry import get_aoi_options
+from src.species.species_registry import get_species_options
 
 # --------------------------------------------------
 # Alert Service
@@ -31,3 +33,15 @@ def process_alert_request(
     )
 
     return result
+
+# --------------------------------------------------
+# Website Options
+# --------------------------------------------------
+
+def get_alert_options() -> dict:
+
+    return {
+        "aois": get_aoi_options(),
+        "species": get_species_options(),
+        "time_intervals": get_time_interval_options()
+    }

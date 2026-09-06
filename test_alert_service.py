@@ -1,10 +1,6 @@
-from src.backend.alert_service import process_alert_request
+from src.backend.alert_service import get_alert_options
 
 
-result = process_alert_request(
-    aoi_name="loudoun",
-    species_name="bald_eagle",
-    time_interval="1_week"
-)
+options = get_alert_options()
 
-print(result)
+print(options)

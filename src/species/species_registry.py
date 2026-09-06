@@ -896,6 +896,21 @@ def get_species_dropdown_options() -> list[dict]:
         if species.get("active", False)
     ]
 
+def get_species_options() -> list:
+
+    options = []
+
+    for key, species in SPECIES.items():
+
+        if species["active"]:
+            options.append({
+                "value": key,
+                "label": species["common_name"],
+                "group": species["group"],
+                "subgroup": species["subgroup"]
+            })
+
+    return options
 
 #--------------------------------------------------
 # Test Section

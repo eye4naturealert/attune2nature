@@ -182,6 +182,17 @@ def load_mile_markers() -> gpd.GeoDataFrame:
 
     return gpd.read_file(path)
 
+def get_aoi_options() -> list:
+
+    options = []
+
+    for key, aoi in AOIS.items():
+        options.append({
+            "value": key,
+            "label": aoi["name"]
+        })
+
+    return options
 
 #--------------------------------------------------
 # Test Section
