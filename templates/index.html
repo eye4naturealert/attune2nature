@@ -15,76 +15,123 @@
     </p>
 
 
-    <label for="aoi">Area</label>
+    <form method="POST">
 
-    <select id="aoi">
+        <!-- Area of Interest -->
 
-        {% for aoi in options["aois"] %}
+        <label for="aoi">Area</label>
 
-            <option value="{{ aoi['value'] }}">
-                {{ aoi["label"] }}
-            </option>
+        <select id="aoi" name="aoi">
 
-        {% endfor %}
+            {% for aoi in options["aois"] %}
 
-    </select>
+                <option value="{{ aoi['value'] }}">
+                    {{ aoi["label"] }}
+                </option>
 
+            {% endfor %}
 
-    <br><br>
-
-
-    <label for="species">Species</label>
-
-    <select id="species">
-
-        {% for species in options["species"] %}
-
-            <option value="{{ species['value'] }}">
-                {{ species["label"] }}
-            </option>
-
-        {% endfor %}
-
-    </select>
+        </select>
 
 
-    <br><br>
+        <br><br>
 
 
-    <label for="time_interval">Alert Interval</label>
+        <!-- Species -->
 
-    <select id="time_interval">
+        <label for="species">Species</label>
 
-        {% for interval in options["time_intervals"] %}
+        <select id="species" name="species">
 
-            <option value="{{ interval['value'] }}">
-                {{ interval["label"] }}
-            </option>
+            {% for species in options["species"] %}
 
-        {% endfor %}
+                <option value="{{ species['value'] }}">
+                    {{ species["label"] }}
+                </option>
 
-    </select>
+            {% endfor %}
 
-
-    <br><br>
-
-
-    <label for="email">Email Address</label>
-
-    <input
-        type="email"
-        id="email"
-        placeholder="you@example.com"
-    >
+        </select>
 
 
-    <br><br>
+        <br><br>
 
 
-    <button>
-        Create Alert
-    </button>
+        <!-- Alert Interval -->
 
+        <label for="time_interval">Alert Interval</label>
+
+        <select id="time_interval" name="time_interval">
+
+            {% for interval in options["time_intervals"] %}
+
+                <option value="{{ interval['value'] }}">
+                    {{ interval["label"] }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+
+        <br><br>
+
+
+        <!-- Email Address -->
+
+        <label for="email">Email Address</label>
+
+        <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="you@example.com"
+        >
+
+
+        <br><br>
+
+
+        <!-- Submit Button -->
+
+        <button type="submit">
+            Test Alert
+        </button>
+
+    </form>
+
+    {% if result %}
+
+    <hr>
+
+    <h2>Alert Result</h2>
+
+    <p>
+        <strong>Area:</strong>
+        {{ result["aoi_name"] }}
+    </p>
+
+    <p>
+        <strong>Species:</strong>
+        {{ result["common_name"] }}
+    </p>
+
+    <p>
+        <strong>Lookback Hours:</strong>
+        {{ result["lookback_hours"] }}
+    </p>
+
+    <p>
+        <strong>Observations Found:</strong>
+        {{ result["observation_count"] }}
+    </p>
+
+    <p>
+        <strong>Should Send Alert:</strong>
+        {{ result["should_send_alert"] }}
+    </p>
+
+{% endif %}
 
 </body>
 
