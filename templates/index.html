@@ -39,11 +39,15 @@
 
         <!-- Species -->
 
-        <label for="species">Species</label>
+    <label for="species">Species</label>
 
-        <select id="species" name="species">
+    <select id="species" name="species">
 
-            {% for species in options["species"] %}
+    {% for group, species_list in options["species"] | groupby("group") %}
+
+        <optgroup label="{{ group }}">
+
+            {% for species in species_list %}
 
                 <option value="{{ species['value'] }}">
                     {{ species["label"] }}
@@ -51,11 +55,14 @@
 
             {% endfor %}
 
-        </select>
+        </optgroup>
 
+    {% endfor %}
+
+</select>
 
         <br><br>
-
+        
 
         <!-- Alert Interval -->
 
