@@ -39,30 +39,31 @@
 
         <!-- Species -->
 
-    <label for="species">Species</label>
+        <label for="species">Species</label>
 
-    <select id="species" name="species">
+        <select id="species" name="species">
 
-    {% for group, species_list in options["species"] | groupby("group") %}
+            {% for group, species_list in options["species"] | groupby("group") %}
 
-        <optgroup label="{{ group }}">
+                <optgroup label="{{ group }}">
 
-            {% for species in species_list %}
+                    {% for species in species_list %}
 
-                <option value="{{ species['value'] }}">
-                    {{ species["label"] }}
-                </option>
+                        <option value="{{ species['value'] }}">
+                            {{ species["label"] }}
+                        </option>
+
+                    {% endfor %}
+
+                </optgroup>
 
             {% endfor %}
 
-        </optgroup>
+        </select>
 
-    {% endfor %}
-
-</select>
 
         <br><br>
-        
+
 
         <!-- Alert Interval -->
 
@@ -107,38 +108,78 @@
 
     </form>
 
+
+    <!-- Alert Results -->
+
     {% if result %}
 
-    <hr>
+        <hr>
 
-    <h2>Alert Result</h2>
+        <h2>Alert Result</h2>
 
-    <p>
-        <strong>Area:</strong>
-        {{ result["aoi_name"] }}
-    </p>
+        <p>
+            <strong>Area:</strong>
+            {{ result["aoi_name"] }}
+        </p>
 
-    <p>
-        <strong>Species:</strong>
-        {{ result["common_name"] }}
-    </p>
+        <p>
+            <strong>Species:</strong>
+            {{ result["common_name"] }}
+        </p>
 
-    <p>
-        <strong>Lookback Hours:</strong>
-        {{ result["lookback_hours"] }}
-    </p>
+        <p>
+            <strong>Lookback Hours:</strong>
+            {{ result["lookback_hours"] }}
+        </p>
 
-    <p>
-        <strong>Observations Found:</strong>
-        {{ result["observation_count"] }}
-    </p>
+        <p>
+            <strong>Observations Found:</strong>
+            {{ result["observation_count"] }}
+        </p>
 
-    <p>
-        <strong>Should Send Alert:</strong>
-        {{ result["should_send_alert"] }}
-    </p>
+        <p>
+            <strong>Should Send Alert:</strong>
+            {{ result["should_send_alert"] }}
+        </p>
 
-{% endif %}
+
+        <!-- Individual Observations -->
+
+        {% if result["observations"] %}
+
+            <h3>Observations</h3>
+
+            {% for observation in result["observations"] %}
+
+                <hr>
+
+                <p>
+                    <strong>Observed On:</strong>
+                    {{ observation["observed_on"] }}
+                </p>
+
+                <p>
+                    <strong>Observer:</strong>
+                    {{ observation["observer"] }}
+                </p>
+
+                <p>
+                    <strong>Quality Grade:</strong>
+                    {{ observation["quality_grade"] }}
+                </p>
+
+                <p>
+                    <a href="{{ observation['url'] }}" target="_blank">
+                        View on iNaturalist
+                    </a>
+                </p>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endif %}
+
 
 </body>
 
