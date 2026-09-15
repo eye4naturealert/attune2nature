@@ -1,26 +1,17 @@
-# --------------------------------------------------
-# Imports
-# --------------------------------------------------
+import json
 
-from flask import Flask, render_template, request
-
-from src.backend.alert_service import get_alert_options
+from flask import Flask, render_template, request, jsonify
 
 from src.backend.alert_service import (
     get_alert_options,
     process_alert_request
 )
 
-# --------------------------------------------------
-# Flask App
-# --------------------------------------------------
+from src.spatial.aoi_registry import AOIS
+
 
 app = Flask(__name__)
 
-
-# --------------------------------------------------
-# Home Page
-# --------------------------------------------------
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -45,9 +36,27 @@ def home():
         options=options,
         result=result
     )
+
+
 # --------------------------------------------------
-# Run App
+# AOI GeoJSON
 # --------------------------------------------------
+
+@app.route("/aoi/<aoi_name>/geojson")
+def get_aoi_geojson(aoi_name):
+
+    if aoi_name not in AOIS:
+        return jsonify({
+            "error": "AOI not found"
+        }), 404
+
+    geojson_path = AOIS[aoi_name]["geometry"]
+
+    with open(geojson_path, "r", encoding="utf-8") as file:
+        geojson_data = json.load(file)
+
+    return jsonify(geojson_data)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

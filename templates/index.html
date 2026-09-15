@@ -3,8 +3,72 @@
 <html>
 
 <head>
+
     <title>Attune2Nature</title>
+
+    <!-- Leaflet CSS -->
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""
+    >
+
+    <style>
+
+        /* --------------------------------------------------
+           Main Page Layout
+        -------------------------------------------------- */
+
+        .main-layout {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+
+        /* Left side: search + results */
+
+        .search-panel {
+            width: 40%;
+        }
+
+
+        /* Right side: map */
+
+        .map-panel {
+            width: 60%;
+        }
+
+
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+
+
+        /* --------------------------------------------------
+           Mobile Layout
+        -------------------------------------------------- */
+
+        @media (max-width: 800px) {
+
+            .main-layout {
+                flex-direction: column;
+            }
+
+            .search-panel,
+            .map-panel {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
@@ -15,170 +79,312 @@
     </p>
 
 
-    <form method="POST">
+    <!-- ==================================================
+         MAIN TWO-COLUMN LAYOUT
+    ================================================== -->
 
-        <!-- Area of Interest -->
-
-        <label for="aoi">Area</label>
-
-        <select id="aoi" name="aoi">
-
-            {% for aoi in options["aois"] %}
-
-                <option value="{{ aoi['value'] }}">
-                    {{ aoi["label"] }}
-                </option>
-
-            {% endfor %}
-
-        </select>
+    <div class="main-layout">
 
 
-        <br><br>
+        <!-- ==================================================
+             LEFT SIDE
+             Search Controls + Results
+        ================================================== -->
+
+        <div class="search-panel">
 
 
-        <!-- Species -->
+            <form method="POST">
 
-        <label for="species">Species</label>
+                <!-- Area of Interest -->
 
-        <select id="species" name="species">
+                <label for="aoi">Area</label>
 
-            {% for group, species_list in options["species"] | groupby("group") %}
+                <br>
 
-                <optgroup label="{{ group }}">
+                <select id="aoi" name="aoi">
 
-                    {% for species in species_list %}
+                    {% for aoi in options["aois"] %}
 
-                        <option value="{{ species['value'] }}">
-                            {{ species["label"] }}
+                        <option value="{{ aoi['value'] }}">
+                            {{ aoi["label"] }}
                         </option>
 
                     {% endfor %}
 
-                </optgroup>
-
-            {% endfor %}
-
-        </select>
+                </select>
 
 
-        <br><br>
+                <br><br>
 
 
-        <!-- Alert Interval -->
+                <!-- Species -->
 
-        <label for="time_interval">Alert Interval</label>
+                <label for="species">Species</label>
 
-        <select id="time_interval" name="time_interval">
+                <br>
 
-            {% for interval in options["time_intervals"] %}
+                <select id="species" name="species">
 
-                <option value="{{ interval['value'] }}">
-                    {{ interval["label"] }}
-                </option>
+                    {% for group, species_list in options["species"] | groupby("group") %}
 
-            {% endfor %}
+                        <optgroup label="{{ group }}">
 
-        </select>
+                            {% for species in species_list %}
 
+                                <option value="{{ species['value'] }}">
+                                    {{ species["label"] }}
+                                </option>
 
-        <br><br>
+                            {% endfor %}
 
+                        </optgroup>
 
-        <!-- Email Address -->
+                    {% endfor %}
 
-        <label for="email">Email Address</label>
-
-        <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="you@example.com"
-        >
+                </select>
 
 
-        <br><br>
+                <br><br>
 
 
-        <!-- Submit Button -->
+                <!-- Alert Interval -->
 
-        <button type="submit">
-            Test Alert
-        </button>
+                <label for="time_interval">
+                    Alert Interval
+                </label>
 
-    </form>
+                <br>
 
+                <select
+                    id="time_interval"
+                    name="time_interval"
+                >
 
-    <!-- Alert Results -->
+                    {% for interval in options["time_intervals"] %}
 
-    {% if result %}
+                        <option value="{{ interval['value'] }}">
+                            {{ interval["label"] }}
+                        </option>
 
-        <hr>
+                    {% endfor %}
 
-        <h2>Alert Result</h2>
-
-        <p>
-            <strong>Area:</strong>
-            {{ result["aoi_name"] }}
-        </p>
-
-        <p>
-            <strong>Species:</strong>
-            {{ result["common_name"] }}
-        </p>
-
-        <p>
-            <strong>Lookback Hours:</strong>
-            {{ result["lookback_hours"] }}
-        </p>
-
-        <p>
-            <strong>Observations Found:</strong>
-            {{ result["observation_count"] }}
-        </p>
-
-        <p>
-            <strong>Should Send Alert:</strong>
-            {{ result["should_send_alert"] }}
-        </p>
+                </select>
 
 
-        <!-- Individual Observations -->
+                <br><br>
 
-        {% if result["observations"] %}
 
-            <h3>Observations</h3>
+                <!-- Search Button -->
 
-            {% for observation in result["observations"] %}
+                <button type="submit">
+                    Search Observations
+                </button>
+
+            </form>
+
+
+            <!-- ==================================================
+                 RESULTS
+            ================================================== -->
+
+            {% if result %}
 
                 <hr>
 
+                <h2>Search Results</h2>
+
                 <p>
-                    <strong>Observed On:</strong>
-                    {{ observation["observed_on"] }}
+                    <strong>Area:</strong>
+                    {{ result["aoi_name"] }}
                 </p>
 
                 <p>
-                    <strong>Observer:</strong>
-                    {{ observation["observer"] }}
+                    <strong>Species:</strong>
+                    {{ result["common_name"] }}
                 </p>
 
                 <p>
-                    <strong>Quality Grade:</strong>
-                    {{ observation["quality_grade"] }}
+                    <strong>Lookback Hours:</strong>
+                    {{ result["lookback_hours"] }}
                 </p>
 
                 <p>
-                    <a href="{{ observation['url'] }}" target="_blank">
-                        View on iNaturalist
-                    </a>
+                    <strong>Observations Found:</strong>
+                    {{ result["observation_count"] }}
                 </p>
 
-            {% endfor %}
+                <p>
+                    <strong>Should Send Alert:</strong>
+                    {{ result["should_send_alert"] }}
+                </p>
 
-        {% endif %}
 
-    {% endif %}
+                <!-- Individual Observations -->
+
+                {% if result["observations"] %}
+
+                    <h3>Observations</h3>
+
+                    {% for observation in result["observations"] %}
+
+                        <hr>
+
+                        <p>
+                            <strong>Observed On:</strong>
+                            {{ observation["observed_on"] }}
+                        </p>
+
+                        <p>
+                            <strong>Observer:</strong>
+                            {{ observation["observer"] }}
+                        </p>
+
+                        <p>
+                            <strong>Quality Grade:</strong>
+                            {{ observation["quality_grade"] }}
+                        </p>
+
+                        <p>
+                            <a
+                                href="{{ observation['url'] }}"
+                                target="_blank"
+                            >
+                                View on iNaturalist
+                            </a>
+                        </p>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            {% endif %}
+
+
+        </div>
+
+
+        <!-- ==================================================
+             RIGHT SIDE
+             Map
+        ================================================== -->
+
+        <div class="map-panel">
+
+            <h2>Search Area</h2>
+
+            <div id="map"></div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ==================================================
+         LEAFLET JAVASCRIPT
+    ================================================== -->
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin="">
+    </script>
+
+
+    <script>
+
+        // --------------------------------------------------
+        // Create Map
+        // --------------------------------------------------
+
+        const map = L.map("map").setView(
+            [38.95, -77.45],
+            9
+        );
+
+
+        // --------------------------------------------------
+        // Add OpenStreetMap Basemap
+        // --------------------------------------------------
+
+        L.tileLayer(
+            "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+                maxZoom: 19,
+                attribution: "&copy; OpenStreetMap contributors"
+            }
+        ).addTo(map);
+
+
+        // --------------------------------------------------
+        // AOI Layer
+        // --------------------------------------------------
+
+        let aoiLayer = null;
+
+
+        // --------------------------------------------------
+        // Load Selected AOI
+        // --------------------------------------------------
+
+        function loadAOI(aoiName) {
+
+            fetch(`/aoi/${aoiName}/geojson`)
+
+                .then(response => response.json())
+
+                .then(data => {
+
+                    // Remove previous AOI
+
+                    if (aoiLayer) {
+                        map.removeLayer(aoiLayer);
+                    }
+
+
+                    // Add selected AOI
+
+                    aoiLayer =
+                        L.geoJSON(data).addTo(map);
+
+
+                    // Zoom to selected AOI
+
+                    map.fitBounds(
+                        aoiLayer.getBounds()
+                    );
+
+                });
+
+        }
+
+
+        // --------------------------------------------------
+        // Listen for AOI Dropdown Change
+        // --------------------------------------------------
+
+        const aoiDropdown =
+            document.getElementById("aoi");
+
+
+        aoiDropdown.addEventListener(
+            "change",
+            function () {
+
+                loadAOI(this.value);
+
+            }
+        );
+
+
+        // --------------------------------------------------
+        // Load Initial AOI
+        // --------------------------------------------------
+
+        loadAOI(aoiDropdown.value);
+
+    </script>
 
 
 </body>
