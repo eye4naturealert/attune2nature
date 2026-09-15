@@ -106,7 +106,10 @@
 
                     {% for aoi in options["aois"] %}
 
-                        <option value="{{ aoi['value'] }}">
+                        <option
+                            value="{{ aoi['value'] }}"
+                            {% if request.form.get("aoi") == aoi["value"] %}selected{% endif %}
+                        >
                             {{ aoi["label"] }}
                         </option>
 
@@ -133,6 +136,13 @@
                             {% for species in species_list %}
 
                                 <option value="{{ species['value'] }}">
+                                    {{ species["label"] }}
+                                </option>
+
+                                <option
+                                    value="{{ species['value'] }}"
+                                    {% if request.form.get("species") == species["value"] %}selected{% endif %}
+                                >
                                     {{ species["label"] }}
                                 </option>
 
@@ -163,10 +173,12 @@
 
                     {% for interval in options["time_intervals"] %}
 
-                        <option value="{{ interval['value'] }}">
+                        <option
+                            value="{{ interval['value'] }}"
+                            {% if request.form.get("time_interval") == interval["value"] %}selected{% endif %}
+                        >
                             {{ interval["label"] }}
                         </option>
-
                     {% endfor %}
 
                 </select>
@@ -298,11 +310,14 @@
         // Create Map
         // --------------------------------------------------
 
-        const map = L.map("map").setView(
-            [38.95, -77.45],
-            9
-        );
+        const map = L.map("map");
 
+        const regionalBounds = [
+            [38.65, -77.90],
+            [39.35, -76.95]
+        ];
+
+map.fitBounds(regionalBounds);
 
         // --------------------------------------------------
         // Add OpenStreetMap Basemap
@@ -348,12 +363,6 @@
                     aoiLayer =
                         L.geoJSON(data).addTo(map);
 
-
-                    // Zoom to selected AOI
-
-                    map.fitBounds(
-                        aoiLayer.getBounds()
-                    );
 
                 });
 
