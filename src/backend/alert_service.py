@@ -32,6 +32,8 @@ def process_alert_request(
         lookback_hours=lookback_hours
     )
 
+    result["time_interval_label"] = interval["label"]
+
     return result
 
 # --------------------------------------------------
