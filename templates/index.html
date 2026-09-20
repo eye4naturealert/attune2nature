@@ -115,33 +115,21 @@
 
                 <!-- Species -->
 
+                <!-- Species -->
                 <label for="species">Species</label>
-
                 <br>
 
                 <select id="species" name="species">
-
                     {% for group, species_list in options["species"] | groupby("group") %}
-
                     <optgroup label="{{ group }}">
-
                         {% for species in species_list %}
-
-                        <option value="{{ species['value'] }}">
-                            {{ species["label"] }}
-                        </option>
-
                         <option value="{{ species['value'] }}" {% if request.form.get("species")==species["value"]
                             %}selected{% endif %}>
                             {{ species["label"] }}
                         </option>
-
                         {% endfor %}
-
                     </optgroup>
-
                     {% endfor %}
-
                 </select>
 
 
@@ -237,6 +225,27 @@
                 <strong>Quality Grade:</strong>
                 {{ observation["quality_grade"] }}
             </p>
+
+            <p>
+                <strong>Location:</strong>
+                {{ observation["latitude"] }},
+                {{ observation["longitude"] }}
+            </p>
+
+            {% if observation["taxon_geoprivacy"] == "obscured" %}
+            <p>
+                <strong>Obscured Location:</strong>
+                iNaturalist obscures the exact location of this species.
+                Coordinates shown are approximate.
+            </p>
+
+            {% elif observation["geoprivacy"] == "obscured" %}
+            <p>
+                <strong>Obscured Location:</strong>
+                The observer has obscured the exact location.
+                Coordinates shown are approximate.
+            </p>
+            {% endif %}
 
             <p>
                 <a href="{{ observation['url'] }}" target="_blank">

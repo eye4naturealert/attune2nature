@@ -55,6 +55,8 @@ def format_observations(
             "observer": obs.get("user", {}).get("login"),
             "latitude": lat,
             "longitude": lon,
+            "geoprivacy": obs.get("geoprivacy"),
+            "taxon_geoprivacy": obs.get("taxon_geoprivacy"),
             "url": (
                 f"https://www.inaturalist.org/observations/"
                 f"{obs.get('id')}"
@@ -232,6 +234,7 @@ if __name__ == "__main__":
         print("Uploaded:", obs["created_at"])
         print("Quality Grade:", obs["quality_grade"])
         print("Observer:", obs["observer"])
+        print("Geoprivacy:", obs["geoprivacy"])
         print("Latitude:", obs["latitude"])
         print("Longitude:", obs["longitude"])
         print("URL:", obs["url"])
