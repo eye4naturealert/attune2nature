@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +8,10 @@
 
     <title>Attune2Nature | Wildlife Alerts</title>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
 
     <style>
         :root {
@@ -64,7 +68,8 @@
 
         .main-layout {
             display: grid;
-            grid-template-columns: minmax(320px, 40%) minmax(0, 60%);
+            grid-template-columns:
+                minmax(320px, 40%) minmax(0, 60%);
             gap: 20px;
             padding: 10px 5% 40px;
         }
@@ -208,10 +213,6 @@
             margin-top: 0;
         }
 
-        .success ul {
-            padding-left: 20px;
-        }
-
         footer {
             text-align: center;
             color: var(--muted);
@@ -237,357 +238,412 @@
 
 <body>
 
-    <header>
-        <div class="brand">
-            Attune<span>2Nature</span>
-        </div>
-    </header>
+<header>
+    <div class="brand">
+        Attune<span>2Nature</span>
+    </div>
+</header>
 
-    <section class="intro">
-        <h1>Stay connected to wildlife around you.</h1>
-        <p>
-            Select your area, choose the species you care about,
-            and prepare personalized wildlife email alerts
-            powered by iNaturalist observations.
-        </p>
-    </section>
+<section class="intro">
+    <h1>Stay connected to wildlife around you.</h1>
 
-    <main class="main-layout">
+    <p>
+        Select your area, choose the species you care about,
+        and receive personalized wildlife email alerts
+        powered by iNaturalist observations.
+    </p>
+</section>
 
-        <!-- LEFT: SUBSCRIPTION FORM -->
+<main class="main-layout">
 
-        <section class="panel">
+    <!-- ==========================================
+         LEFT PANEL: SUBSCRIPTION FORM
+    =========================================== -->
 
-            <h2>Create Your Wildlife Alert</h2>
+    <section class="panel">
 
-            {% if errors %}
-            <div class="message error" role="alert">
-                {% for error in errors %}
+        <h2>Create Your Wildlife Alert</h2>
+
+        <!-- Error Messages -->
+
+        {% if errors %}
+
+        <div class="message error" role="alert">
+
+            {% for error in errors %}
                 <p>{{ error }}</p>
-                {% endfor %}
-            </div>
-            {% endif %}
+            {% endfor %}
 
-            {% if confirmation %}
-            <div class="message success" role="status">
+        </div>
 
-                <h3>Wildlife Alert Request Saved</h3>
+        {% endif %}
 
-                {% if confirmation["action"] == "created" %}
+        <!-- Email Verification Confirmation -->
 
-                <p>
-                    Your wildlife alert request has been
-                    saved successfully.
-                </p>
+        {% if confirmation %}
 
-                {% elif confirmation["action"] == "updated" %}
+        <div class="message success" role="status">
 
-                <p>
-                    Your pending wildlife alert request
-                    has been updated.
-                </p>
+            <h3>Wildlife Alert Request Received</h3>
 
-                {% else %}
-
-                <p>
-                    This wildlife alert request
-                    already exists.
-                </p>
-
-                {% endif %}
-
-                <p>
-                    <strong>Subscription ID:</strong>
-                    {{ confirmation["id"] }}
-                </p>
-
-                <p>
-                    <strong>Area:</strong>
-                    {{ confirmation["aoi"] }}
-                </p>
-
-                <p><strong>Species:</strong></p>
-
-                <ul>
-                    {% for species in confirmation["species"] %}
-                    <li>{{ species }}</li>
-                    {% endfor %}
-                </ul>
-
-                <p>
-                    <strong>Email Frequency:</strong>
-                    {{ confirmation["time_interval"] }}
-                </p>
-
-                <p>
-                    <strong>Email:</strong>
-                    {{ confirmation["email"] }}
-                </p>
-
-                <p>
-                    <strong>Status:</strong>
-                    Pending Verification
-                </p>
-
-                <p>
-                    Email verification and automatic
-                    notifications are not yet enabled.
-                </p>
-            </div>
-            {% endif %}
-
-            <form method="POST" id="alert-form">
-
-                <!-- AOI -->
-
-                <div class="field">
-                    <label class="field-label" for="aoi">
-                        1. Select Your Area
-                    </label>
-
-                    <select id="aoi" name="aoi" required>
-                        {% for aoi in options["aois"] %}
-                        <option value="{{ aoi['value'] }}" {% if form_data["aoi"]==aoi["value"] %} selected {% endif %}>
-                            {{ aoi["label"] }}
-                        </option>
-                        {% endfor %}
-                    </select>
-
-                    <p class="helper">
-                        Your selected area will be highlighted
-                        on the map.
-                    </p>
-                </div>
-
-                <!-- MULTIPLE SPECIES -->
-
-                <div class="field">
-                    <label class="field-label" for="species-search">
-                        2. Choose Species
-                    </label>
-
-                    <input type="search" id="species-search" placeholder="Search for a species...">
-
-                    <div class="species-container">
-
-                        {% for group, species_list in
-                        options["species"] | groupby("group") %}
-
-                        <div class="species-group">
-                            <h3>{{ group }}</h3>
-
-                            {% for species in species_list %}
-
-                            <label class="species-option">
-                                <input type="checkbox" name="species" value="{{ species['value'] }}" {% if
-                                    species["value"] in form_data["species"] %} checked {% endif %}>
-
-                                <span>{{ species["label"] }}</span>
-                            </label>
-
-                            {% endfor %}
-                        </div>
-
-                        {% endfor %}
-
-                    </div>
-
-                    <div class="selection-count" id="selection-count">
-                        0 species selected
-                    </div>
-
-                    <p class="helper">
-                        Select as many species as you like.
-                        They'll be included in one combined alert.
-                    </p>
-                </div>
-
-                <!-- FREQUENCY -->
-
-                <div class="field">
-                    <label class="field-label" for="time_interval">
-                        3. Email Alert Frequency
-                    </label>
-
-                    <select id="time_interval" name="time_interval" required>
-
-                        {% for interval in options["time_intervals"] %}
-
-                        <option value="{{ interval['value'] }}" {% if form_data["time_interval"]==interval["value"] %}
-                            selected {% endif %}>
-                            {{ interval["label"] }}
-                        </option>
-
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <!-- EMAIL -->
-
-                <div class="field">
-                    <label class="field-label" for="email">
-                        4. Email Address
-                    </label>
-
-                    <input type="email" id="email" name="email" value="{{ form_data['email'] }}"
-                        placeholder="you@example.com" autocomplete="email" required>
-
-                    <p class="helper">
-                        This development version saves your request locally.
-                        Email verification and delivery are not yet active.
-                    </p>
-                </div>
-
-                <button class="primary-button" type="submit">
-                    Save Wildlife Alert Request
-                </button>
-
-            </form>
-
-        </section>
-
-        <!-- RIGHT: MAP -->
-
-        <section class="panel">
-
-            <h2>Your Wildlife Watch Area</h2>
-
-            <p class="map-description">
-                The map highlights your selected area.
-                Individual wildlife observations are
-                intentionally not displayed.
+            <p>
+                {{ confirmation["message"] }}
             </p>
 
-            <div id="map"></div>
+            <p>
+                Email verification is required before
+                your subscription becomes active.
+            </p>
 
-        </section>
+            <p>
+                Automated wildlife alerts are still
+                under development.
+            </p>
 
-    </main>
+        </div>
 
-    <footer>
-        Wildlife observation data provided by iNaturalist.
-        Attune2Nature is an independent project.
-    </footer>
+        {% endif %}
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-    </script>
+        <!-- Subscription Form -->
 
-    <script>
-        // ----------------------------------------------
-        // Initialize Map
-        // ----------------------------------------------
+        <form method="POST" id="alert-form">
 
-        const map = L.map("map");
+            <!-- 1. AOI -->
 
-        const regionalBounds = [
-            [38.65, -77.90],
-            [39.35, -76.95]
-        ];
+            <div class="field">
 
-        map.fitBounds(regionalBounds);
+                <label class="field-label" for="aoi">
+                    1. Select Your Area
+                </label>
 
-        L.tileLayer(
-            "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-            {
-                maxZoom: 19,
-                attribution: "&copy; OpenStreetMap contributors"
+                <select id="aoi" name="aoi" required>
+
+                    {% for aoi in options["aois"] %}
+
+                    <option
+                        value="{{ aoi['value'] }}"
+                        {% if form_data["aoi"] == aoi["value"] %}
+                        selected
+                        {% endif %}
+                    >
+                        {{ aoi["label"] }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+                <p class="helper">
+                    Your selected area will be highlighted
+                    on the map.
+                </p>
+
+            </div>
+
+            <!-- 2. MULTIPLE SPECIES -->
+
+            <div class="field">
+
+                <label class="field-label" for="species-search">
+                    2. Choose Species
+                </label>
+
+                <input
+                    type="search"
+                    id="species-search"
+                    placeholder="Search for a species..."
+                >
+
+                <div class="species-container">
+
+                    {% for group, species_list in
+                       options["species"] | groupby("group") %}
+
+                    <div class="species-group">
+
+                        <h3>{{ group }}</h3>
+
+                        {% for species in species_list %}
+
+                        <label class="species-option">
+
+                            <input
+                                type="checkbox"
+                                name="species"
+                                value="{{ species['value'] }}"
+                                {% if species["value"] in form_data["species"] %}
+                                checked
+                                {% endif %}
+                            >
+
+                            <span>
+                                {{ species["label"] }}
+                            </span>
+
+                        </label>
+
+                        {% endfor %}
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+                <div
+                    class="selection-count"
+                    id="selection-count"
+                >
+                    0 species selected
+                </div>
+
+                <p class="helper">
+                    Select as many species as you like.
+                    They'll be included in one combined alert.
+                </p>
+
+            </div>
+
+            <!-- 3. ALERT FREQUENCY -->
+
+            <div class="field">
+
+                <label
+                    class="field-label"
+                    for="time_interval"
+                >
+                    3. Email Alert Frequency
+                </label>
+
+                <select
+                    id="time_interval"
+                    name="time_interval"
+                    required
+                >
+
+                    {% for interval in options["time_intervals"] %}
+
+                    <option
+                        value="{{ interval['value'] }}"
+                        {% if form_data["time_interval"] == interval["value"] %}
+                        selected
+                        {% endif %}
+                    >
+                        {{ interval["label"] }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <!-- 4. EMAIL -->
+
+            <div class="field">
+
+                <label class="field-label" for="email">
+                    4. Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value="{{ form_data['email'] }}"
+                    placeholder="you@example.com"
+                    autocomplete="email"
+                    required
+                >
+
+                <p class="helper">
+                    We'll send a verification email to activate
+                    your subscription. Automated wildlife alerts
+                    are still under development.
+                </p>
+
+            </div>
+
+            <!-- SUBMIT -->
+
+            <button
+                class="primary-button"
+                type="submit"
+            >
+                Save Wildlife Alert Request
+            </button>
+
+        </form>
+
+    </section>
+
+    <!-- ==========================================
+         RIGHT PANEL: LEAFLET MAP
+    =========================================== -->
+
+    <section class="panel">
+
+        <h2>Your Wildlife Watch Area</h2>
+
+        <p class="map-description">
+            The map highlights your selected area.
+            Individual wildlife observations are
+            intentionally not displayed.
+        </p>
+
+        <div id="map"></div>
+
+    </section>
+
+</main>
+
+<footer>
+    Wildlife observation data provided by iNaturalist.
+    Attune2Nature is an independent project.
+</footer>
+
+<!-- Leaflet JavaScript -->
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+    // ----------------------------------------------
+    // Initialize Map
+    // ----------------------------------------------
+
+    const map = L.map("map");
+
+    const regionalBounds = [
+        [38.65, -77.90],
+        [39.35, -76.95]
+    ];
+
+    map.fitBounds(regionalBounds);
+
+    L.tileLayer(
+        "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            maxZoom: 19,
+            attribution: "&copy; OpenStreetMap contributors"
+        }
+    ).addTo(map);
+
+
+    // ----------------------------------------------
+    // Highlight Selected AOI
+    // ----------------------------------------------
+
+    let aoiLayer = null;
+    let aoiRequestNumber = 0;
+
+    function loadAOI(aoiName) {
+
+        const requestNumber = ++aoiRequestNumber;
+
+        fetch(
+            `/aoi/${encodeURIComponent(aoiName)}/geojson`
+        )
+        .then(response => {
+
+            if (!response.ok) {
+                throw new Error("Unable to load AOI");
             }
-        ).addTo(map);
 
-        // ----------------------------------------------
-        // Highlight Selected AOI
-        // ----------------------------------------------
+            return response.json();
 
-        let aoiLayer = null;
-        let aoiRequestNumber = 0;
+        })
+        .then(data => {
 
-        function loadAOI(aoiName) {
+            // Ignore outdated responses when
+            // users change AOIs rapidly.
 
-            const requestNumber = ++aoiRequestNumber;
+            if (requestNumber !== aoiRequestNumber) {
+                return;
+            }
 
-            fetch(
-                `/aoi/${encodeURIComponent(aoiName)}/geojson`
-            )
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Unable to load AOI");
-                    }
-                    return response.json();
-                })
-                .then(data => {
+            if (aoiLayer) {
+                map.removeLayer(aoiLayer);
+            }
 
-                    // Ignore outdated responses if the user
-                    // changes AOIs rapidly.
+            aoiLayer = L.geoJSON(data, {
+                style: {
+                    color: "#228B22",
+                    weight: 3,
+                    opacity: 1,
+                    fillColor: "#90EE90",
+                    fillOpacity: 0.25
+                }
+            }).addTo(map);
 
-                    if (requestNumber !== aoiRequestNumber) {
-                        return;
-                    }
+            // Do not zoom when AOI changes.
 
-                    if (aoiLayer) {
-                        map.removeLayer(aoiLayer);
-                    }
+        })
+        .catch(error => {
+            console.error(
+                "AOI loading error:",
+                error
+            );
+        });
+    }
 
-                    aoiLayer = L.geoJSON(data, {
-                        style: {
-                            color: "#228B22",
-                            weight: 3,
-                            opacity: 1,
-                            fillColor: "#90EE90",
-                            fillOpacity: 0.25
-                        }
-                    }).addTo(map);
+    const aoiDropdown =
+        document.getElementById("aoi");
 
-                    // Intentionally do not zoom to the AOI.
-                })
-                .catch(error => {
-                    console.error("AOI loading error:", error);
-                });
-        }
-
-        const aoiDropdown =
-            document.getElementById("aoi");
-
-        aoiDropdown.addEventListener("change", function () {
+    aoiDropdown.addEventListener(
+        "change",
+        function () {
             loadAOI(this.value);
-        });
-
-        if (aoiDropdown.value) {
-            loadAOI(aoiDropdown.value);
         }
+    );
 
-        // ----------------------------------------------
-        // Species Search and Selection Counter
-        // ----------------------------------------------
+    if (aoiDropdown.value) {
+        loadAOI(aoiDropdown.value);
+    }
 
-        const speciesSearch =
-            document.getElementById("species-search");
 
-        const speciesCheckboxes =
-            document.querySelectorAll(
-                'input[name="species"]'
-            );
+    // ----------------------------------------------
+    // Species Selection
+    // ----------------------------------------------
 
-        const selectionCount =
-            document.getElementById("selection-count");
+    const speciesSearch =
+        document.getElementById("species-search");
 
-        function updateSpeciesCount() {
+    const speciesCheckboxes =
+        document.querySelectorAll(
+            'input[name="species"]'
+        );
 
-            const count = document.querySelectorAll(
-                'input[name="species"]:checked'
-            ).length;
+    const selectionCount =
+        document.getElementById("selection-count");
 
-            selectionCount.textContent =
-                `${count} species selected`;
-        }
+    function updateSpeciesCount() {
 
-        speciesCheckboxes.forEach(checkbox => {
-            checkbox.addEventListener(
-                "change",
-                updateSpeciesCount
-            );
-        });
+        const count = document.querySelectorAll(
+            'input[name="species"]:checked'
+        ).length;
 
-        speciesSearch.addEventListener("input", function () {
+        selectionCount.textContent =
+            `${count} species selected`;
+    }
+
+    speciesCheckboxes.forEach(checkbox => {
+
+        checkbox.addEventListener(
+            "change",
+            updateSpeciesCount
+        );
+
+    });
+
+
+    // ----------------------------------------------
+    // Species Search
+    // ----------------------------------------------
+
+    speciesSearch.addEventListener(
+        "input",
+        function () {
 
             const searchText =
                 this.value.toLowerCase().trim();
@@ -614,19 +670,26 @@
                     if (matches) {
                         visibleCount++;
                     }
+
                 });
 
                 group.style.display =
                     visibleCount > 0 ? "block" : "none";
+
             });
-        });
 
-        // ----------------------------------------------
-        // Validate Species Before Submission
-        // ----------------------------------------------
+        }
+    );
 
-        document.getElementById("alert-form")
-            .addEventListener("submit", function (event) {
+
+    // ----------------------------------------------
+    // Validate Species Before Submission
+    // ----------------------------------------------
+
+    document.getElementById("alert-form")
+        .addEventListener(
+            "submit",
+            function (event) {
 
                 const selectedCount =
                     document.querySelectorAll(
@@ -634,17 +697,21 @@
                     ).length;
 
                 if (selectedCount === 0) {
+
                     event.preventDefault();
+
                     alert(
                         "Please select at least one species."
                     );
+
                 }
-            });
 
-        updateSpeciesCount();
+            }
+        );
 
-    </script>
+    updateSpeciesCount();
+
+</script>
 
 </body>
-
 </html>

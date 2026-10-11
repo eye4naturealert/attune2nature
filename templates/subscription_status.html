@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <title>{{ title }} | Attune2Nature</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7f3;
+            color: #24342a;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .card {
+            max-width: 520px;
+            margin: 60px auto;
+            padding: 35px;
+            background: white;
+            border: 1px solid #dbe4dc;
+            border-radius: 14px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #246b46;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 22px;
+            background: #246b46;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h1>{{ title }}</h1>
+
+        <p>{{ message }}</p>
+
+        {% if recovery_unsubscribe_url %}
+        <p>
+            Your confirmation email could not be sent.
+            Save this unsubscribe link:
+        </p>
+
+        <p>
+            <a href="{{ recovery_unsubscribe_url }}">
+                Manage Unsubscription
+            </a>
+        </p>
+        {% endif %}
+
+        <a href="{{ url_for('home') }}">
+            Return to Attune2Nature
+        </a>
+
+    </div>
+
+</body>
+</html>

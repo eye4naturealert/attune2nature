@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <title>Unsubscribe | Attune2Nature</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7f3;
+            color: #24342a;
+            padding: 40px 20px;
+        }
+
+        .card {
+            max-width: 520px;
+            margin: 60px auto;
+            padding: 35px;
+            background: white;
+            border-radius: 14px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #246b46;
+        }
+
+        button {
+            background: #246b46;
+            color: white;
+            padding: 13px 25px;
+            border: 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        a {
+            display: block;
+            margin-top: 20px;
+            color: #246b46;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h1>Unsubscribe from Wildlife Alerts?</h1>
+
+        <p>
+            This will deactivate the subscription
+            associated with this link.
+        </p>
+
+        <form method="POST">
+
+            <button type="submit">
+                Confirm Unsubscribe
+            </button>
+
+        </form>
+
+        <a href="{{ url_for('home') }}">
+            Cancel and Return Home
+        </a>
+
+    </div>
+
+</body>
+</html>

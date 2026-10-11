@@ -4,11 +4,29 @@
 
 import json
 import re
+import smtplib
 
-from flask import Flask, render_template, request, jsonify
+from flask import (
+    Flask,
+    render_template,
+    request,
+    jsonify,
+    url_for
+)
 
 from src.backend.alert_service import get_alert_options
-from src.backend.subscription_service import save_subscription
+
+from src.backend.subscription_service import (
+    create_pending_subscription,
+    verify_subscription,
+    unsubscribe
+)
+
+from src.backend.email_service import (
+    send_verification_email,
+    send_activation_email
+)
+
 from src.spatial.aoi_registry import AOIS
 
 
@@ -16,7 +34,7 @@ app = Flask(__name__)
 
 
 # --------------------------------------------------
-# Homepage / Subscription Form
+# Homepage
 # --------------------------------------------------
 
 @app.route("/", methods=["GET", "POST"])
@@ -47,30 +65,27 @@ def home():
             ).strip()
         }
 
-        # ------------------------------------------
-        # Validate AOI
-        # ------------------------------------------
-
         valid_aois = {
             item["value"]
             for item in options["aois"]
         }
-
-        if form_data["aoi"] not in valid_aois:
-            errors.append("Please select a valid area.")
-
-        # ------------------------------------------
-        # Validate Species
-        # ------------------------------------------
 
         valid_species = {
             item["value"]
             for item in options["species"]
         }
 
+        valid_intervals = {
+            item["value"]
+            for item in options["time_intervals"]
+        }
+
         selected_species = list(
             dict.fromkeys(form_data["species"])
         )
+
+        if form_data["aoi"] not in valid_aois:
+            errors.append("Please select a valid area.")
 
         if not selected_species:
             errors.append(
@@ -85,23 +100,10 @@ def home():
                 "One or more selected species are invalid."
             )
 
-        # ------------------------------------------
-        # Validate Alert Interval
-        # ------------------------------------------
-
-        valid_intervals = {
-            item["value"]
-            for item in options["time_intervals"]
-        }
-
         if form_data["time_interval"] not in valid_intervals:
             errors.append(
                 "Please select a valid alert interval."
             )
-
-        # ------------------------------------------
-        # Validate Email
-        # ------------------------------------------
 
         email_pattern = r"^[^@\s]+@[^@\s]+\.[^@\s]+$"
 
@@ -114,47 +116,70 @@ def home():
             )
 
         # ------------------------------------------
-        # Save Subscription
+        # Save Pending Subscription
         # ------------------------------------------
 
         if not errors:
 
-            subscription = save_subscription(
-                email=form_data["email"],
-                aoi_name=form_data["aoi"],
-                species_names=selected_species,
-                time_interval=form_data["time_interval"]
-            )
+            try:
 
-            species_labels = {
-                item["value"]: item["label"]
-                for item in options["species"]
-            }
+                subscription = create_pending_subscription(
+                    email=form_data["email"],
+                    aoi_name=form_data["aoi"],
+                    species_names=selected_species,
+                    time_interval=form_data["time_interval"]
+                )
 
-            aoi_labels = {
-                item["value"]: item["label"]
-                for item in options["aois"]
-            }
+                action = subscription["action"]
 
-            interval_labels = {
-                item["value"]: item["label"]
-                for item in options["time_intervals"]
-            }
+                if action == "existing_active":
 
-            confirmation = {
-                "id": subscription["id"],
-                "action": subscription["action"],
-                "status": subscription["status"],
-                "aoi": aoi_labels[form_data["aoi"]],
-                "species": [
-                    species_labels[name]
-                    for name in selected_species
-                ],
-                "time_interval": interval_labels[
-                    form_data["time_interval"]
-                ],
-                "email": form_data["email"]
-            }
+                    # Do not disclose whether the
+                    # submitted address has an active
+                    # subscription.
+
+                    confirmation = {
+                        "message": (
+                            "If this request is eligible, "
+                            "a verification email will be sent."
+                        )
+                    }
+
+                else:
+
+                    token = subscription["verification_token"]
+
+                    verification_url = url_for(
+                        "verify_email",
+                        token=token,
+                        _external=True
+                    )
+
+                    send_verification_email(
+                        recipient=form_data["email"],
+                        verification_url=verification_url
+                    )
+
+                    confirmation = {
+                        "message": (
+                            "A verification email has been "
+                            "sent. Check your inbox and "
+                            "click the link to activate "
+                            "your subscription."
+                        )
+                    }
+
+            except (
+                OSError,
+                smtplib.SMTPException,
+                RuntimeError
+            ):
+
+                errors.append(
+                    "Your request was saved, but the "
+                    "verification email could not be sent. "
+                    "Please try submitting the form again."
+                )
 
     return render_template(
         "index.html",
@@ -166,6 +191,113 @@ def home():
 
 
 # --------------------------------------------------
+# Verify Email
+# --------------------------------------------------
+
+# --------------------------------------------------
+# Verify Email
+# --------------------------------------------------
+
+@app.route("/verify/<token>")
+def verify_email(token):
+
+    result = verify_subscription(token)
+
+    if not result["success"]:
+
+        return render_template(
+            "subscription_status.html",
+            title="Verification Failed",
+            message=result["message"]
+        ), 400
+
+    unsubscribe_url = url_for(
+        "unsubscribe_email",
+        token=result["unsubscribe_token"],
+        _external=True
+    )
+
+    try:
+
+        send_activation_email(
+            recipient=result["email"],
+            unsubscribe_url=unsubscribe_url
+        )
+
+        message = (
+            "Your email address has been verified. "
+            "Your subscription is active. "
+            "Check your inbox for your confirmation "
+            "and unsubscribe link."
+        )
+
+    except (
+        OSError,
+        smtplib.SMTPException,
+        RuntimeError
+    ):
+
+        return render_template(
+            "subscription_status.html",
+            title="Email Verified!",
+            message=(
+                "Your subscription is active, "
+                "but the confirmation email could "
+                "not be delivered. Save the "
+                "unsubscribe link below."
+            ),
+            recovery_unsubscribe_url=unsubscribe_url
+        )
+
+    return render_template(
+        "subscription_status.html",
+        title="Email Verified!",
+        message=message
+    )
+
+# --------------------------------------------------
+# Unsubscribe
+# --------------------------------------------------
+
+@app.route(
+    "/unsubscribe/<token>",
+    methods=["GET", "POST"]
+)
+def unsubscribe_email(token):
+
+    if request.method == "GET":
+
+        return render_template(
+            "unsubscribe.html",
+            token=token
+        )
+
+    success = unsubscribe(token)
+
+    if success:
+
+        title = "Unsubscribed"
+        message = (
+            "Your wildlife alert subscription "
+            "has been deactivated."
+        )
+
+    else:
+
+        title = "Unable to Unsubscribe"
+        message = (
+            "This unsubscribe link is invalid "
+            "or has already been used."
+        )
+
+    return render_template(
+        "subscription_status.html",
+        title=title,
+        message=message
+    )
+
+
+# --------------------------------------------------
 # AOI GeoJSON
 # --------------------------------------------------
 
@@ -173,6 +305,7 @@ def home():
 def get_aoi_geojson(aoi_name):
 
     if aoi_name not in AOIS:
+
         return jsonify({
             "error": "AOI not found"
         }), 404
@@ -180,14 +313,17 @@ def get_aoi_geojson(aoi_name):
     geojson_path = AOIS[aoi_name]["geometry"]
 
     try:
+
         with open(
             geojson_path,
             "r",
             encoding="utf-8"
         ) as file:
+
             geojson_data = json.load(file)
 
     except (OSError, json.JSONDecodeError):
+
         return jsonify({
             "error": "Unable to load AOI geometry"
         }), 500
