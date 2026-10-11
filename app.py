@@ -1,9 +1,14 @@
+# --------------------------------------------------
+# Imports
+# --------------------------------------------------
+
 import json
 import re
 
 from flask import Flask, render_template, request, jsonify
 
 from src.backend.alert_service import get_alert_options
+from src.backend.subscription_service import save_subscription
 from src.spatial.aoi_registry import AOIS
 
 
@@ -109,10 +114,17 @@ def home():
             )
 
         # ------------------------------------------
-        # Prepare Subscription Preview
+        # Save Subscription
         # ------------------------------------------
 
         if not errors:
+
+            subscription = save_subscription(
+                email=form_data["email"],
+                aoi_name=form_data["aoi"],
+                species_names=selected_species,
+                time_interval=form_data["time_interval"]
+            )
 
             species_labels = {
                 item["value"]: item["label"]
@@ -130,6 +142,9 @@ def home():
             }
 
             confirmation = {
+                "id": subscription["id"],
+                "action": subscription["action"],
+                "status": subscription["status"],
                 "aoi": aoi_labels[form_data["aoi"]],
                 "species": [
                     species_labels[name]
