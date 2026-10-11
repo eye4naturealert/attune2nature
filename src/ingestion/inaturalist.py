@@ -129,9 +129,7 @@ def query_inaturalist_by_bbox(
 
             "taxon_id": taxon_id,
 
-            "created_d1": since.isoformat(
-                timespec="seconds"
-            ),
+            "d1": since.date().isoformat(),
 
             "per_page": per_page,
             "page": page,
@@ -214,9 +212,7 @@ def query_inaturalist_by_place_id(
             "place_id": place_id,
             "taxon_id": taxon_id,
 
-            "created_d1": since.isoformat(
-                timespec="seconds"
-            ),
+            "d1": since.date().isoformat(),
 
             "per_page": per_page,
             "page": page,

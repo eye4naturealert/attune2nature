@@ -1,386 +1,637 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
 
-    <title>Attune2Nature</title>
+    <title>Attune2Nature | Wildlife Alerts</title>
 
-    <!-- Leaflet CSS -->
-
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
     <style>
-        /* --------------------------------------------------
-           Main Page Layout
-        -------------------------------------------------- */
+        :root {
+            --green: #246b46;
+            --green-dark: #194d33;
+            --green-light: #e9f4eb;
+            --background: #f5f7f3;
+            --text: #24342a;
+            --muted: #64746a;
+            --border: #dbe4dc;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--background);
+            color: var(--text);
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 20px 5%;
+        }
+
+        .brand {
+            font-size: 27px;
+            font-weight: bold;
+            color: var(--green);
+        }
+
+        .brand span {
+            color: var(--text);
+        }
+
+        .intro {
+            padding: 30px 5% 15px;
+        }
+
+        .intro h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        .intro p {
+            color: var(--muted);
+            max-width: 700px;
+        }
 
         .main-layout {
+            display: grid;
+            grid-template-columns: minmax(320px, 40%) minmax(0, 60%);
+            gap: 20px;
+            padding: 10px 5% 40px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 24px;
+            min-width: 0;
+        }
+
+        .panel h2 {
+            margin-top: 0;
+            font-size: 21px;
+        }
+
+        .field {
+            margin-bottom: 23px;
+        }
+
+        label.field-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        select,
+        input[type="email"],
+        input[type="search"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #bfcfc2;
+            border-radius: 8px;
+            background: white;
+            font-size: 15px;
+        }
+
+        select:focus,
+        input:focus {
+            outline: 2px solid #7ebc91;
+            outline-offset: 1px;
+        }
+
+        .helper {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 7px;
+        }
+
+        .species-container {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            max-height: 290px;
+            overflow-y: auto;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .species-group {
+            margin-bottom: 15px;
+        }
+
+        .species-group h3 {
+            font-size: 14px;
+            color: var(--green);
+            margin: 6px 0 9px;
+        }
+
+        .species-option {
             display: flex;
-            gap: 30px;
-            align-items: flex-start;
+            align-items: center;
+            gap: 9px;
+            padding: 6px;
+            cursor: pointer;
         }
 
-
-        /* Left side: search + results */
-
-        .search-panel {
-            width: 40%;
+        .species-option:hover {
+            background: var(--green-light);
+            border-radius: 6px;
         }
 
-
-        /* Right side: map */
-
-        .map-panel {
-            width: 60%;
+        .species-option input {
+            accent-color: var(--green);
+            width: 17px;
+            height: 17px;
         }
 
+        .selection-count {
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--green);
+            margin-top: 8px;
+        }
+
+        .primary-button {
+            width: 100%;
+            padding: 15px;
+            border: 0;
+            border-radius: 9px;
+            background: var(--green);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .primary-button:hover {
+            background: var(--green-dark);
+        }
+
+        .map-description {
+            color: var(--muted);
+            font-size: 14px;
+        }
 
         #map {
-            height: 600px;
             width: 100%;
+            height: 590px;
+            border-radius: 10px;
+            margin-top: 15px;
         }
 
+        .message {
+            border-radius: 9px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
 
-        /* --------------------------------------------------
-           Mobile Layout
-        -------------------------------------------------- */
+        .error {
+            background: #fff0ee;
+            border: 1px solid #e7b3ab;
+        }
 
-        @media (max-width: 800px) {
+        .success {
+            background: var(--green-light);
+            border: 1px solid #b5d6bc;
+        }
 
+        .success h3 {
+            margin-top: 0;
+        }
+
+        .success ul {
+            padding-left: 20px;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+            padding: 20px;
+        }
+
+        @media (max-width: 900px) {
             .main-layout {
-                flex-direction: column;
+                grid-template-columns: 1fr;
             }
 
-            .search-panel,
-            .map-panel {
-                width: 100%;
+            #map {
+                height: 420px;
             }
 
+            .intro h1 {
+                font-size: 25px;
+            }
         }
     </style>
-
 </head>
-
 
 <body>
 
-    <h1>Attune2Nature</h1>
+<header>
+    <div class="brand">
+        Attune<span>2Nature</span>
+    </div>
+</header>
 
+<section class="intro">
+    <h1>Stay connected to wildlife around you.</h1>
     <p>
-        Choose a location, species, and alert interval.
+        Select your area, choose the species you care about,
+        and prepare personalized wildlife email alerts
+        powered by iNaturalist observations.
     </p>
+</section>
 
+<main class="main-layout">
 
-    <!-- ==================================================
-         MAIN TWO-COLUMN LAYOUT
-    ================================================== -->
+    <!-- LEFT: SUBSCRIPTION FORM -->
 
-    <div class="main-layout">
+    <section class="panel">
 
+        <h2>Create Your Wildlife Alert</h2>
 
-        <!-- ==================================================
-             LEFT SIDE
-             Search Controls + Results
-        ================================================== -->
+        {% if errors %}
+        <div class="message error" role="alert">
+            {% for error in errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
 
-        <div class="search-panel">
+        {% if confirmation %}
+        <div class="message success" role="status">
+            <h3>Subscription Preview Ready</h3>
 
+            <p>
+                Your selections have been validated.
+                No subscription has been saved yet.
+            </p>
 
-            <form method="POST">
+            <p><strong>Area:</strong>
+                {{ confirmation["aoi"] }}
+            </p>
 
-                <!-- Area of Interest -->
+            <p><strong>Species:</strong></p>
+            <ul>
+                {% for species in confirmation["species"] %}
+                <li>{{ species }}</li>
+                {% endfor %}
+            </ul>
 
-                <label for="aoi">Area</label>
+            <p><strong>Frequency:</strong>
+                {{ confirmation["time_interval"] }}
+            </p>
 
-                <br>
+            <p><strong>Email:</strong>
+                {{ confirmation["email"] }}
+            </p>
+        </div>
+        {% endif %}
 
-                <select id="aoi" name="aoi">
+        <form method="POST" id="alert-form">
 
-                    {% for aoi in options["aois"] %}
+            <!-- AOI -->
 
-                    <option value="{{ aoi['value'] }}" {% if request.form.get("aoi")==aoi["value"] %}selected{% endif
-                        %}>
-                        {{ aoi["label"] }}
-                    </option>
-
-                    {% endfor %}
-
-                </select>
-
-
-                <br><br>
-
-
-                <!-- Species -->
-
-                <!-- Species -->
-                <label for="species">Species</label>
-                <br>
-
-                <select id="species" name="species">
-                    {% for group, species_list in options["species"] | groupby("group") %}
-                    <optgroup label="{{ group }}">
-                        {% for species in species_list %}
-                        <option value="{{ species['value'] }}" {% if request.form.get("species")==species["value"]
-                            %}selected{% endif %}>
-                            {{ species["label"] }}
-                        </option>
-                        {% endfor %}
-                    </optgroup>
-                    {% endfor %}
-                </select>
-
-
-                <br><br>
-
-
-                <!-- Alert Interval -->
-
-                <label for="time_interval">
-                    Alert Interval
+            <div class="field">
+                <label class="field-label" for="aoi">
+                    1. Select Your Area
                 </label>
 
-                <br>
+                <select id="aoi" name="aoi" required>
+                    {% for aoi in options["aois"] %}
+                    <option value="{{ aoi['value'] }}"
+                        {% if form_data["aoi"] == aoi["value"] %}
+                        selected
+                        {% endif %}>
+                        {{ aoi["label"] }}
+                    </option>
+                    {% endfor %}
+                </select>
 
-                <select id="time_interval" name="time_interval">
+                <p class="helper">
+                    Your selected area will be highlighted
+                    on the map.
+                </p>
+            </div>
+
+            <!-- MULTIPLE SPECIES -->
+
+            <div class="field">
+                <label class="field-label" for="species-search">
+                    2. Choose Species
+                </label>
+
+                <input
+                    type="search"
+                    id="species-search"
+                    placeholder="Search for a species...">
+
+                <div class="species-container">
+
+                    {% for group, species_list in
+                       options["species"] | groupby("group") %}
+
+                    <div class="species-group">
+                        <h3>{{ group }}</h3>
+
+                        {% for species in species_list %}
+
+                        <label class="species-option">
+                            <input
+                                type="checkbox"
+                                name="species"
+                                value="{{ species['value'] }}"
+                                {% if species["value"] in
+                                   form_data["species"] %}
+                                checked
+                                {% endif %}>
+
+                            <span>{{ species["label"] }}</span>
+                        </label>
+
+                        {% endfor %}
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+                <div class="selection-count"
+                     id="selection-count">
+                    0 species selected
+                </div>
+
+                <p class="helper">
+                    Select as many species as you like.
+                    They'll be included in one combined alert.
+                </p>
+            </div>
+
+            <!-- FREQUENCY -->
+
+            <div class="field">
+                <label class="field-label" for="time_interval">
+                    3. Email Alert Frequency
+                </label>
+
+                <select id="time_interval"
+                        name="time_interval"
+                        required>
 
                     {% for interval in options["time_intervals"] %}
 
-                    <option value="{{ interval['value'] }}" {% if request.form.get("time_interval")==interval["value"]
-                        %}selected{% endif %}>
+                    <option value="{{ interval['value'] }}"
+                        {% if form_data["time_interval"]
+                           == interval["value"] %}
+                        selected
+                        {% endif %}>
                         {{ interval["label"] }}
                     </option>
+
                     {% endfor %}
-
                 </select>
+            </div>
 
+            <!-- EMAIL -->
 
-                <br><br>
+            <div class="field">
+                <label class="field-label" for="email">
+                    4. Email Address
+                </label>
 
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value="{{ form_data['email'] }}"
+                    placeholder="you@example.com"
+                    autocomplete="email"
+                    required>
 
-                <!-- Search Button -->
+                <p class="helper">
+                    Email delivery will be enabled
+                    in a later development phase.
+                </p>
+            </div>
 
-                <button type="submit">
-                    Search Observations
-                </button>
+            <button class="primary-button" type="submit">
+                Preview Wildlife Alert
+            </button>
 
-            </form>
+        </form>
 
+    </section>
 
-            <!-- ==================================================
-                 RESULTS
-            ================================================== -->
+    <!-- RIGHT: MAP -->
 
-            {% if result %}
+    <section class="panel">
 
-            <h2>Attune2Nature Alert</h2>
+        <h2>Your Wildlife Watch Area</h2>
 
-            <h3>
-                {{ result["common_name"] }}
-            </h3>
+        <p class="map-description">
+            The map highlights your selected area.
+            Individual wildlife observations are
+            intentionally not displayed.
+        </p>
 
-            <p>
-                <strong>Area:</strong>
-                {{ result["aoi_name"] }}
-            </p>
+        <div id="map"></div>
 
-            <p>
-                <strong>Time Period:</strong>
-                {{ result["time_interval_label"] }}
-            </p>
+    </section>
 
-            <p>
-                <strong>
-                    {{ result["observation_count"] }}
-                    observation{% if result["observation_count"] != 1 %}s{% endif %}
-                    reported.
-                </strong>
-            </p>
+</main>
 
+<footer>
+    Wildlife observation data provided by iNaturalist.
+    Attune2Nature is an independent project.
+</footer>
 
-            <!-- Individual Observations -->
-            <!-- Individual Observations -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
 
-            {% if result["observations"] %}
+<script>
+    // ----------------------------------------------
+    // Initialize Map
+    // ----------------------------------------------
 
-            <h3>Observations</h3>
+    const map = L.map("map");
 
-            {% for observation in result["observations"] %}
+    const regionalBounds = [
+        [38.65, -77.90],
+        [39.35, -76.95]
+    ];
 
-            <hr>
+    map.fitBounds(regionalBounds);
 
-            <p>
-                <strong>Observed On:</strong>
-                {{ observation["observed_on"] }}
-            </p>
-
-            <p>
-                <strong>Observer:</strong>
-                {{ observation["observer"] }}
-            </p>
-
-            <p>
-                <strong>Quality Grade:</strong>
-                {{ observation["quality_grade"] }}
-            </p>
-
-            <p>
-                <strong>Location:</strong>
-                {{ observation["latitude"] }},
-                {{ observation["longitude"] }}
-            </p>
-
-            {% if observation["taxon_geoprivacy"] == "obscured" %}
-            <p>
-                <strong>Obscured Location:</strong>
-                iNaturalist obscures the exact location of this species.
-                Coordinates shown are approximate.
-            </p>
-
-            {% elif observation["geoprivacy"] == "obscured" %}
-            <p>
-                <strong>Obscured Location:</strong>
-                The observer has obscured the exact location.
-                Coordinates shown are approximate.
-            </p>
-            {% endif %}
-
-            <p>
-                <a href="{{ observation['url'] }}" target="_blank">
-                    View on iNaturalist
-                </a>
-            </p>
-
-            {% endfor %}
-
-            {% endif %}
-
-            {% endif %}
-
-
-        </div>
-
-
-        <!-- ==================================================
-             RIGHT SIDE
-             Map
-        ================================================== -->
-
-        <div class="map-panel">
-
-            <h2>Search Area</h2>
-
-            <div id="map"></div>
-
-        </div>
-
-
-    </div>
-
-
-    <!-- ==================================================
-         LEAFLET JAVASCRIPT
-    ================================================== -->
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="">
-        </script>
-
-
-    <script>
-
-        // --------------------------------------------------
-        // Create Map
-        // --------------------------------------------------
-
-        const map = L.map("map");
-
-        const regionalBounds = [
-            [38.65, -77.90],
-            [39.35, -76.95]
-        ];
-
-        map.fitBounds(regionalBounds);
-
-        // --------------------------------------------------
-        // Add OpenStreetMap Basemap
-        // --------------------------------------------------
-
-        L.tileLayer(
-            "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-            {
-                maxZoom: 19,
-                attribution: "&copy; OpenStreetMap contributors"
-            }
-        ).addTo(map);
-
-
-        // --------------------------------------------------
-        // AOI Layer
-        // --------------------------------------------------
-
-        let aoiLayer = null;
-
-
-        // --------------------------------------------------
-        // Load Selected AOI
-        // --------------------------------------------------
-
-        function loadAOI(aoiName) {
-
-            fetch(`/aoi/${aoiName}/geojson`)
-
-                .then(response => response.json())
-
-                .then(data => {
-
-                    // Remove previous AOI
-
-                    if (aoiLayer) {
-                        map.removeLayer(aoiLayer);
-                    }
-
-
-                    // Add selected AOI
-
-                    aoiLayer =
-                        L.geoJSON(data).addTo(map);
-
-
-                });
-
+    L.tileLayer(
+        "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            maxZoom: 19,
+            attribution: "&copy; OpenStreetMap contributors"
         }
+    ).addTo(map);
 
+    // ----------------------------------------------
+    // Highlight Selected AOI
+    // ----------------------------------------------
 
-        // --------------------------------------------------
-        // Listen for AOI Dropdown Change
-        // --------------------------------------------------
+    let aoiLayer = null;
+    let aoiRequestNumber = 0;
 
-        const aoiDropdown =
-            document.getElementById("aoi");
+    function loadAOI(aoiName) {
 
+        const requestNumber = ++aoiRequestNumber;
 
-        aoiDropdown.addEventListener(
-            "change",
-            function () {
-
-                loadAOI(this.value);
-
+        fetch(
+            `/aoi/${encodeURIComponent(aoiName)}/geojson`
+        )
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Unable to load AOI");
             }
+            return response.json();
+        })
+        .then(data => {
+
+            // Ignore outdated responses if the user
+            // changes AOIs rapidly.
+
+            if (requestNumber !== aoiRequestNumber) {
+                return;
+            }
+
+            if (aoiLayer) {
+                map.removeLayer(aoiLayer);
+            }
+
+            aoiLayer = L.geoJSON(data, {
+                style: {
+                    color: "#228B22",
+                    weight: 3,
+                    opacity: 1,
+                    fillColor: "#90EE90",
+                    fillOpacity: 0.25
+                }
+            }).addTo(map);
+
+            // Intentionally do not zoom to the AOI.
+        })
+        .catch(error => {
+            console.error("AOI loading error:", error);
+        });
+    }
+
+    const aoiDropdown =
+        document.getElementById("aoi");
+
+    aoiDropdown.addEventListener("change", function () {
+        loadAOI(this.value);
+    });
+
+    if (aoiDropdown.value) {
+        loadAOI(aoiDropdown.value);
+    }
+
+    // ----------------------------------------------
+    // Species Search and Selection Counter
+    // ----------------------------------------------
+
+    const speciesSearch =
+        document.getElementById("species-search");
+
+    const speciesCheckboxes =
+        document.querySelectorAll(
+            'input[name="species"]'
         );
 
+    const selectionCount =
+        document.getElementById("selection-count");
 
-        // --------------------------------------------------
-        // Load Initial AOI
-        // --------------------------------------------------
+    function updateSpeciesCount() {
 
-        loadAOI(aoiDropdown.value);
+        const count = document.querySelectorAll(
+            'input[name="species"]:checked'
+        ).length;
 
-    </script>
+        selectionCount.textContent =
+            `${count} species selected`;
+    }
 
+    speciesCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener(
+            "change",
+            updateSpeciesCount
+        );
+    });
+
+    speciesSearch.addEventListener("input", function () {
+
+        const searchText =
+            this.value.toLowerCase().trim();
+
+        document.querySelectorAll(
+            ".species-group"
+        ).forEach(group => {
+
+            let visibleCount = 0;
+
+            group.querySelectorAll(
+                ".species-option"
+            ).forEach(option => {
+
+                const speciesName =
+                    option.textContent.toLowerCase();
+
+                const matches =
+                    speciesName.includes(searchText);
+
+                option.style.display =
+                    matches ? "flex" : "none";
+
+                if (matches) {
+                    visibleCount++;
+                }
+            });
+
+            group.style.display =
+                visibleCount > 0 ? "block" : "none";
+        });
+    });
+
+    // ----------------------------------------------
+    // Validate Species Before Submission
+    // ----------------------------------------------
+
+    document.getElementById("alert-form")
+        .addEventListener("submit", function (event) {
+
+            const selectedCount =
+                document.querySelectorAll(
+                    'input[name="species"]:checked'
+                ).length;
+
+            if (selectedCount === 0) {
+                event.preventDefault();
+                alert(
+                    "Please select at least one species."
+                );
+            }
+        });
+
+    updateSpeciesCount();
+
+</script>
 
 </body>
-
 </html>
