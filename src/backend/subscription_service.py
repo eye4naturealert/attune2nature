@@ -93,7 +93,8 @@ def initialize_database():
             "verification_expires_at": "TEXT",
             "unsubscribe_token_hash": "TEXT",
             "verified_at": "TEXT",
-            "unsubscribed_at": "TEXT"
+            "unsubscribed_at": "TEXT",
+            "last_checked_at": "TEXT"
         }
 
         for column, column_type in new_columns.items():
@@ -404,7 +405,8 @@ def get_subscriptions():
                 created_at,
                 verified_at,
                 unsubscribed_at
-
+                last_checked_at
+                
             FROM subscriptions
 
             ORDER BY created_at DESC
